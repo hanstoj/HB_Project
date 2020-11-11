@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+<div class = "container">
+    <form action="POST">
+        <div>
+            <label for="phone">Enter Phone Number</label>
+            <input type="tel" id="phone" name="phone" required>
+        </div>
+        <div>
+            <label for="first_name">Enter First Name</label>
+            <input type="text" name="first_name" id="first_name">
+        </div>
+        <div>
+            <label for="last_name">Enter Last Name</label>
+            <input type="text" name="last_name" id="last_name">
+        </div>
+        <div>
+            <label for="party_num">Number of Guests in Party</label>
+            <input type="number" name="party_num" id="party_num">
+        </div>
+        <div>
+            <label for="res_date">Reservation Date</label>
+            <input type="date" name="res_date" id="res_date">
+        </div>
+        <div>
+            <label for="res_time">Reservation time</label>
+            <input type="time" name="res_time" id="res_time">
+        </div>
+
+
+    </form>
+</div>
+{% endblock %}
