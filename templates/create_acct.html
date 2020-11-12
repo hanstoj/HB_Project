@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create TableTIme Account</title>
+    <title>Create TableTime Account</title>
 </head>
 <body>
-    <form action="POST">
-        <div class="container">
+    <form action="/layout">
+        <div class="container" method="POST">
             <div>
                 <label for="username">Create Username</label>
                 <input type="text" name="username" id="username">
@@ -24,10 +24,6 @@
                 <label for="restaurant_name">Restaurant Name</label>
                 <input type="text" name="restaurant_name" id="restaurant_name">
             </div>
-            <div>
-                <label for="restaurant_type">Restaurant Name</label>
-                <input type="text" name="restaurant_type" id="restaurant_type">
-            </div>
             <br>
             <br>
             <div>
@@ -40,20 +36,6 @@
             </div>
             <button>Create Account</button>
         </div>
-    </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
     </form>
 </body>
 </html>

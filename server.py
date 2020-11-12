@@ -10,14 +10,14 @@ app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
 
 
-@app.route('/restaurant')
+@app.route('/home')
 def TableTime():
     """View homepage."""
 
     return render_template('table_time.html')
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def login_page():
     """View homepage."""
 

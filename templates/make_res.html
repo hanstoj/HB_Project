@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class = "container">
-    <form action="POST">
+    <form action="/make_res" method="POST">
         <div>
             <label for="phone">Enter Phone Number</label>
             <input type="tel" id="phone" name="phone" required>
@@ -29,8 +29,6 @@
             <label for="res_time">Reservation time</label>
             <input type="time" name="res_time" id="res_time">
         </div>
-
-
     </form>
 </div>
 {% endblock %}
