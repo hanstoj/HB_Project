@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect)
 from model import connect_to_db
-import crud
+# from crud import crud
 
 from jinja2 import StrictUndefined
 
@@ -10,11 +10,39 @@ app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
 
 
-@app.route('/')
+@app.route('/restaurant')
 def TableTime():
     """View homepage."""
 
     return render_template('table_time.html')
+
+
+@app.route('/')
+def login_page():
+    """View homepage."""
+
+    return render_template('log_in.html')
+
+
+@app.route('/make_res')
+def view_make_res():
+    """View Res Page"""
+
+    return render_template('make_res.html')
+
+
+# @app.route('/create_acct')
+# def create_acct():
+#     """create acct"""
+
+
+# @app.route('/<guest_id>')
+# def show_user(guest_id):
+#     """Show details on a particular guest."""
+
+#     guest = crud.get_guest_by_id(guest_id)
+
+#     return render_template('user_details.html', guest=guest)
 
 
 if __name__ == '__main__':
