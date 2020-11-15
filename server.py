@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect)
 from model import connect_to_db
-# from crud import crud
+from crud import crud
 
 from jinja2 import StrictUndefined
 
@@ -20,26 +20,40 @@ def TableTime():
 @app.route('/', methods=['POST'])
 def login_page():
     """View homepage."""
+    username = request.form.get('username')
+    password = request.form.get('password')
+    restaurant_name = request.form.get('restaurant_name')
+    open_time = request.form.get('open_time')
+    close_time = request.form.get('close_time')
+
+    user = crud.get_user_by_email(email)
+    if user:
+        flash('Cannot create an account with that email. Try again.')
+    else:
+        crud.create_user(username, password, restaurant_name,
+                         open_time, close_time)
+        flash('Account created!)
+
+    return redirect('/')
 
     return render_template('log_in.html')
 
 
-@app.route('/log_in')
-def log_user():
-
-
-user = get_user(request.form['username'])
-
-if user.check_password(request.form['password']):
-    login_user(user)
-    app.logger.info('%s logged in successfully', user.username)
-    return redirect(url_for('index'))
-
-
-@app.route('/create_acct')
-def view_create_acct():
+@app.route('/create_acct', methods=['POST'])
+def create_acct():
     """View Acct Page"""
+    username = request.form.get('username')
+    password = request.form.get('password')
+    restaurant_name = request.form.get('restaurant_name')
+    open_time = request.form.get('open_time')
+    close_time = request.form.get('close_time')
 
+    user = crud.get_user_by_email(email)
+    if user:
+        flash('Cannot create an account with that email. Try again.')
+    else:
+        crud.create_user(email, password)
+        flash('Account created! Please log in.')
     return render_template('create_acct.html')
 
 
