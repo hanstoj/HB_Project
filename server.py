@@ -17,11 +17,23 @@ def TableTime():
     return render_template('table_time.html')
 
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['POST'])
 def login_page():
     """View homepage."""
 
     return render_template('log_in.html')
+
+
+@app.route('/log_in')
+def log_user():
+
+
+user = get_user(request.form['username'])
+
+if user.check_password(request.form['password']):
+    login_user(user)
+    app.logger.info('%s logged in successfully', user.username)
+    return redirect(url_for('index'))
 
 
 @app.route('/create_acct')
@@ -30,6 +42,12 @@ def view_create_acct():
 
     return render_template('create_acct.html')
 
+
+@app.route('/layout', methods=['POST'])
+def view_layout_page():
+    """View Acct Page"""
+
+    return render_template('layout.html')
 # @app.route('/make_res')
 # def view_make_res():
 #     """View Res Page"""

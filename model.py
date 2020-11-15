@@ -14,6 +14,8 @@ class Restaurant(db.Model):
     username = db.Column(db.String, unique=True)
     password = db.Column(db.String)
     restaurant_name = db.Column(db.String)
+    open_time = db.Column(db.Time)
+    open_time = db.Column(db.Time)
 
     def __repr__(self):
         return f'<Restaurant restaurant_id={self.restaurant_id} email={self.email} password={self.password} restaurant_name={self.restaurant_name}>'
@@ -30,7 +32,6 @@ class Table(db.Model):
     booth = db.Column(db.Boolean)
     num_seats = db.Column(db.Integer)
     table_status = db.Column(db.Boolean)
-    table_hours = db.Column(db.DateTime)
     restaurant_id = db.Column(
         db.Integer, db.ForeignKey('restaurants.restaurant_id'))
     res_id = db.Column(db.Integer, db.ForeignKey('reservations.res_id'))
