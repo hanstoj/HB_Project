@@ -6,17 +6,20 @@
     <title>Log In</title>
 </head>
 <body>
-    <form action="/home" method="POST" >
+    <form action="/home" method="GET >
         <div>
             <label for="username">Enter Username</label>
-            <input type="text" name="username" id="username">
+            <input type="text" name="username" id="username" required>
         </div>
         <div>
             <label for="password">Enter password</label>
-            <input type="text" name="password" id="password">
+            <input type="password" name="password" id="password" required>
         </div>
         <button type="submit">Log in</button>
     </form>
+    <div>
+        <a href="/create_acct">Create TableTimer account</a>
+    </div>
 
 </body>
 </html>

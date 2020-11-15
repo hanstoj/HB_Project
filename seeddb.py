@@ -28,6 +28,39 @@ for restaurant in range(5):
     model.db.session.add(restaurant)
     model.db.session.commit()
 
+    for table in range(8):
+        table_num = fake.num()
+        booth = fake.boolean()
+        num_seats = fake.num()
+        table_status = fake.boolean()
+
+    # for
+
+
+#     table_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+#     table_num = db.Column(db.String, unique=True)
+#     booth = db.Column(db.Boolean)
+#     num_seats = db.Column(db.Integer)
+#     table_status = db.Column(db.Boolean)
+#     table_hours = db.Column(db.DateTime)
+#     restaurant_id = db.Column(
+#         db.Integer, db.ForeignKey('restaurants.restaurant_id'))
+#     res_id = db.Column(db.Integer, db.ForeignKey('reservations.res_id'))
+
+#     restaurant = db.relationship('Restaurant', backref='tables')
+#     reservation = db.relationship('Reservation')
+    # for reservation in range(10):
+    #     res_size = random.randint(1, 4)
+    #     res_time = datetime.today()
+    #     # faker how to get reasonable times
+    #     arrival_time = res_time
+    #     end_time = arrival_time +
+    #     booth_pref = fake.boolean()
+    #     res_notes = db.Column(db.Text)
+    #     celebrating = db.Column(db.Boolean)
+    #     table_id = db.Column(db.Integer, db.ForeignKey('tables.table_id'))
+    #     phone_num = db.Column(db.String, db.ForeignKey('guests.phone_num'))
+
     # for guests in range(50):
     #     name = fake.name()
     #     phone_num = fake.unique.phone()

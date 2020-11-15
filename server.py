@@ -24,11 +24,17 @@ def login_page():
     return render_template('log_in.html')
 
 
-@app.route('/make_res')
-def view_make_res():
-    """View Res Page"""
+@app.route('/create_acct')
+def view_create_acct():
+    """View Acct Page"""
 
-    return render_template('make_res.html')
+    return render_template('create_acct.html')
+
+# @app.route('/make_res')
+# def view_make_res():
+#     """View Res Page"""
+
+#     return render_template('make_res.html')
 
 
 # @app.route('/create_acct')
@@ -43,7 +49,6 @@ def view_make_res():
 #     guest = crud.get_guest_by_id(guest_id)
 
 #     return render_template('user_details.html', guest=guest)
-
 
 if __name__ == '__main__':
     connect_to_db(app)
