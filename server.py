@@ -39,13 +39,6 @@ def login_page():
     return render_template('log_in.html')
 
 
-@app.route('/create_acct')
-def view_acct_page():
-    """View homepage."""
-
-    return render_template('create_acct.html')
-
-
 @app.route('/create_acct', methods=['POST'])
 def create_acct():
     """Create Acct"""
@@ -68,13 +61,37 @@ def create_acct():
 @app.route('/layout', methods=['POST'])
 def view_layout_page():
     """View Acct Page"""
+    table_num = request.form.get('table_num')
+    is_booth = request.form.get('is_booth')
+    num_seats = request.form.get('num_seats')
 
-    return render_template('layout.html')
-# @app.route('/make_res')
-# def view_make_res():
-#     """View Res Page"""
+    table = crud.get_table_by_table_num(table_num)
+    if table:
+        flash('Table number already exists cannot create')
+    else:
+        crud.create_table(table_num=table_num,
+                          is_booth=is_booth, num_seats=num_seats)
 
-#     return render_template('make_res.html')
+    return table
+
+
+@app.route('/make_res', methods=['POST'])
+def make_reservation():
+    """Resrevation form submission response"""
+
+    res_size = request.form.get('res_size')
+    res_time = request.form.get('res_time')
+    arrival_time = request.form.get('arrival_time')
+    end_time = request.form.get('end_time')
+    booth_pref = request.form.get('booth_pref')
+    celebrating = request.form.get('celebrating')
+    phone_num = request.form.get('phone_num')
+
+    # TODO Start time conditional
+    # TODO End time conditional
+    # TODO Bookings Full?
+    crud.create_res(res_size=res_size, res_time=res_time, arrival_time=arrival_time,
+                    end_time=end_time, booth_pref=booth_pref, celebrating=celebrating, phone_num=phone_num)
 
 
 # @app.route('/create_acct')
