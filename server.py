@@ -81,6 +81,7 @@ def make_reservation():
 
     res_size = request.form.get('res_size')
     res_time = request.form.get('res_time')
+    res_notes = request.form.get('res_notes')
     arrival_time = request.form.get('arrival_time')
     end_time = request.form.get('end_time')
     booth_pref = request.form.get('booth_pref')
@@ -90,8 +91,10 @@ def make_reservation():
     # TODO Start time conditional
     # TODO End time conditional
     # TODO Bookings Full?
-    crud.create_res(res_size=res_size, res_time=res_time, arrival_time=arrival_time,
-                    end_time=end_time, booth_pref=booth_pref, celebrating=celebrating, phone_num=phone_num)
+    reservation = crud.create_res(res_size=res_size, res_time=res_time, arrival_time=arrival_time,
+                                  end_time=end_time, booth_pref=booth_pref, celebrating=celebrating, phone_num=phone_num)
+
+    redirect('/make_res', reservation=reservation)
 
 
 # @app.route('/create_acct')
