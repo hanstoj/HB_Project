@@ -13,6 +13,30 @@ def create_restaurant(username, restaurant_name, password, open_time, close_time
     return restaurant
 
 
+def create_table(table_num, is_booth, num_seats, is_taken=False):
+    """Create Table in Restaurant"""
+    table = Table(table_num=table_num, is_booth=is_booth,
+                  num_seats=num_seats, is_taken=is_taken)
+
+    db.session.add(table)
+    db.session.commit()
+
+
+def create_res(res_size, res_time, arrival_time, end_time, booth_pref, res_notes, celebrating, phone_num):
+    """Create and return a restaurant."""
+
+    reservation = Restaurant(res_size=res_size, res_time=res_time, arrival_time=arrival_time,
+                             end_time=end_time, booth_pref=booth_pref, celebrating=celebrating, phone_num=phone_num)
+
+    db.session.add(reservation)
+    db.session.commit()
+
+    return reservation
+
+
+def get_restaurant_by_username(username):
+
+    return Restaurant.query.filter(Restaurant.username == username).first()
 # def get_guest_stats(guest_id):
 
 #     pass

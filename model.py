@@ -29,9 +29,9 @@ class Table(db.Model):
 
     table_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     table_num = db.Column(db.String, unique=True)
-    booth = db.Column(db.Boolean)
+    is_booth = db.Column(db.Boolean)
     num_seats = db.Column(db.Integer)
-    table_status = db.Column(db.Boolean)
+    is_taken = db.Column(db.Boolean)
     restaurant_id = db.Column(
         db.Integer, db.ForeignKey('restaurants.restaurant_id'))
     res_id = db.Column(db.Integer, db.ForeignKey('reservations.res_id'))
