@@ -91,7 +91,7 @@ def make_reservation():
     # TODO Start time conditional
     # TODO End time conditional
     # TODO Bookings Full?
-    reservation = crud.create_res(res_size=res_size, res_time=res_time, arrival_time=arrival_time,
+    reservation = crud.create_res(res_size=res_size, res_time=res_time, res_notes=res_notes, arrival_time=arrival_time,
                                   end_time=end_time, booth_pref=booth_pref, celebrating=celebrating, phone_num=phone_num)
 
     redirect('/make_res', reservation=reservation)

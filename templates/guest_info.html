@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Guests{% endblock %}
+
+{% block body %}
+  <h1>All Guests</h1>
+
+  <ul>
+    {% for guest in guests %}
+      <li>
+          {{ guest.name }} {{ guest.phone }} {{ guest.guest_notes}} {{ guest.num_visits }}
+          {{ guest_stats.avg_time_spent}}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
