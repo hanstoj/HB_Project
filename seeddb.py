@@ -1,7 +1,7 @@
 import model
 import os
 import json
-from random import random
+from random import random, randint
 import datetime
 
 import crud
@@ -29,9 +29,9 @@ for restaurant in range(5):
     model.db.session.commit()
 
     for table in range(8):
-        table_num = fake.num()
+        table_num = randint(1, 9)
         booth = fake.boolean()
-        num_seats = fake.num()
+        num_seats = randint(1, 6)
         table_status = fake.boolean()
 
     # for

@@ -29,7 +29,7 @@ def get_table_by_table_num(table_num):
     return Table.query.filter(Table.table_num == table_num).first()
 
 
-def create_res(res_size, res_time, res_notes, arrival_time, end_time, booth_pref, res_notes, celebrating, phone_num):
+def create_res(res_size, res_time, res_notes, arrival_time, end_time, booth_pref, celebrating, phone_num):
     """Create and return a restaurant."""
 
     reservation = Restaurant(res_size=res_size, res_time=res_time, res_notes=res_notes, arrival_time=arrival_time,

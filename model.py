@@ -34,10 +34,10 @@ class Table(db.Model):
     is_taken = db.Column(db.Boolean)
     restaurant_id = db.Column(
         db.Integer, db.ForeignKey('restaurants.restaurant_id'))
-    res_id = db.Column(db.Integer, db.ForeignKey('reservations.res_id'))
+    # res_id = db.Column(db.Integer, db.ForeignKey('reservations.res_id'))
 
     restaurant = db.relationship('Restaurant', backref='tables')
-    reservation = db.relationship('Reservation')
+    # reservation = db.relationship('Reservation', backref='tables')
 
     def __repr__(self):
         return f'<Table table_id={self.table_id} table_num={self.table_num} booth={self.booth} restaurant_name={self.num_seats}table_status={self.table_status} table_hours={self.table_hours} restaurant_id={self.restaurant_id}>'
