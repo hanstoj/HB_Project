@@ -22,6 +22,8 @@ for restaurant in range(5):
     username = fake.word()
     password = fake.password()
     restaurant_name = fake.name()
+    # open_time = datetime(2019, 1, 1, 0, 0, 0, 0)
+    # closing_time = datetime(2019, 1, 1, 0, 0, 0, 0)
 
     restaurant = model.Restaurant(
         username=username, password=password, restaurant_name=restaurant_name)

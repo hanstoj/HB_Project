@@ -14,8 +14,8 @@ class Restaurant(db.Model):
     username = db.Column(db.String, unique=True)
     password = db.Column(db.String)
     restaurant_name = db.Column(db.String)
-    open_time = db.Column(db.Time)
-    close_time = db.Column(db.Time)
+    # open_time = db.Column(db.Time)
+    # close_time = db.Column(db.Time)
 
     def __repr__(self):
         return f'<Restaurant restaurant_id={self.restaurant_id} email={self.email} password={self.password} restaurant_name={self.restaurant_name}>'
