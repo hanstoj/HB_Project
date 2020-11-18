@@ -14,22 +14,24 @@ class Restaurant(db.Model):
     username = db.Column(db.String, unique=True)
     password = db.Column(db.String)
     restaurant_name = db.Column(db.String)
-    # open_time = db.Column(db.Time)
-    # close_time = db.Column(db.Time)
+    open_time = db.Column(db.Time)  # Store in a datetime.datetime object
+    close_time = db.Column(db.Time)
+
+    # NOTE: To convert time obj to a string in backend  time_str = str(time_obj)
 
     def __repr__(self):
         return f'<Restaurant restaurant_id={self.restaurant_id} email={self.email} password={self.password} restaurant_name={self.restaurant_name}>'
 # resttest = Restaurant(username="user", password="password", restaurant_name="restaurant_name"
 
 
-class Table(db.Model):
+class Dinning_table(db.Model):
     """A Table in the restaurant."""
 
     __tablename__ = 'tables'
 
     table_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     table_num = db.Column(db.String, unique=True)
-    is_booth = db.Column(db.Boolean)
+    is_booth = db.Column(db.Boolean, default=True)
     num_seats = db.Column(db.Integer)
     is_taken = db.Column(db.Boolean)
     restaurant_id = db.Column(
@@ -40,7 +42,7 @@ class Table(db.Model):
     # reservation = db.relationship('Reservation', backref='tables')
 
     def __repr__(self):
-        return f'<Table table_id={self.table_id} table_num={self.table_num} booth={self.booth} restaurant_name={self.num_seats}table_status={self.table_status} table_hours={self.table_hours} restaurant_id={self.restaurant_id}>'
+        return f'<Dinner_Table table_id={self.table_id} table_num={self.table_num} booth={self.booth} restaurant_name={self.num_seats}table_status={self.table_status} table_hours={self.table_hours} restaurant_id={self.restaurant_id}>'
 
 
 class Reservation(db.Model):
@@ -60,7 +62,7 @@ class Reservation(db.Model):
     phone_num = db.Column(db.String, db.ForeignKey('guests.phone_num'))
 
     guest = db.relationship('Guest')
-    table = db.relationship('Table')
+    table = db.relationship('Dinning_table')
     guest_stats = db.relationship('Guest_stat')
 
     def __repr__(self):

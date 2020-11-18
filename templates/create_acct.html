@@ -6,7 +6,7 @@
     <title>Create TableTime Account</title>
 </head>
 <body>
-    <form action="/layout" method="POST">
+    <form action="/create_acct" method="POST">
         <div class="container">
             <div>
                 <label for="username">Create Username</label>
@@ -26,14 +26,15 @@
             </div>
             <br>
             <br>
-            <!-- <div>
-                <label for="open_time">Opening time</label>
+            <div>
+                <label for="open_time">Open Time</label>
                 <input type="time" name="open_time" id="open_time" required>
             </div>
             <div>
-                <label for="close_time">Closing Time</label>
-                <input type="time" name="open_time" id="open_time" required>
-            </div> -->
+                <label for="close_time">Close Time</label>
+                <input type="time" name="close_time" id="close_time" required>
+            </div>
+
             <button type="submit">Create Account</button>
         </div>
     </form>
