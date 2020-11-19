@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables
 
 
 from jinja2 import StrictUndefined
@@ -11,11 +11,12 @@ app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
 
 
-@app.route('/home', methods=['GET'])
+@app.route('/home')
 def TableTime():
     """View homepage."""
+    tables = get_tables()
 
-    return render_template('table_time.html')
+    return render_template('table_time.html', tables=tables)
 
 
 @app.route('/')
@@ -88,6 +89,13 @@ def view_layout_page():
         #
         # TODO create visual table
     return render_template('layout.html')
+
+
+@app.route('/make_res')
+def display_res_page():
+    """Display Res Creation Page"""
+
+    return render_template("make_res.html")
 
 
 @ app.route('/make_res', methods=['POST'])

@@ -3,8 +3,18 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-<div class = "container">
-    <p>display is gonna be here ... you just wait and see</p>
+<div class = "container" >
+    <h1>Dinning Room</h1>
 
+    <ul>
+      {% for table in tables %}
+        <li>
+            table number:{{ table.table_num }}  seats: {{ table.num_seats }} Is booth - {{ table.is_booth }}
+        </li>
+      {% endfor %}
+    </ul>
 </div>
+<a href="/make_res"> Make New Reservation </a>
+
+
 {% endblock %}

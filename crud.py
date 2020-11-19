@@ -52,3 +52,8 @@ def get_restaurant_by_username(username):
 def get_restaurant_by_restaurant_id(restaurant_id):
 
     return Restaurant.query.get(restaurant_id)
+
+
+def get_tables():
+
+    return Dinning_table.query.all()
