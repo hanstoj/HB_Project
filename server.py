@@ -11,7 +11,7 @@ app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
 
 
-@app.route('/home', methods=['POST', 'GET'])
+@app.route('/home', methods=['GET'])
 def TableTime():
     """View homepage."""
 
@@ -83,7 +83,7 @@ def view_layout_page():
         flash('Table number already exists cannot create')
     else:
         create_table(table_num=table_num,
-                     is_booth=is_booth, num_seats=num_seats, restaurant_id=restaurant_id)
+                     is_booth=is_booth, num_seats=num_seats)
         flash('Table was created')
         #
         # TODO create visual table

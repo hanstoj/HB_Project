@@ -16,10 +16,10 @@ def create_restaurant(username, restaurant_name,
     return restaurant
 
 
-def create_table(table_num, is_booth, num_seats, restaurant_id, is_taken=False):
+def create_table(table_num, is_booth, num_seats, is_taken=False):
     """Create Table in Restaurant"""
     table = Dinning_table(table_num=table_num, is_booth=is_booth,
-                          num_seats=num_seats, restaurant_id=restaurant_id, is_taken=is_taken)
+                          num_seats=num_seats, is_taken=is_taken)
 
     db.session.add(table)
     db.session.commit()
