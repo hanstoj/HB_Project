@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables, create_guest
 
 
 from jinja2 import StrictUndefined
@@ -43,17 +43,19 @@ def create_acct():
     open_time = request.form.get('open_time')
     close_time = request.form.get('close_time')
 
-    restaurant = get_restaurant_by_username(username)
-    if restaurant:
-        flash('Cannot create an account with that email. Try again.')
-        # return redirect('/layout')
-    else:
-        create_restaurant(username, restaurant_name,
-                          password, open_time, close_time)
-        #
+    create_restaurant(username, restaurant_name,
+                      password, open_time, close_time)
 
-        return render_template('layout.html')
-        # redirect('/layout')
+    # restaurant = get_restaurant_by_username(username)
+    # if restaurant:
+    #     flash('Cannot create an account with that email. Try again.')
+    #     # return redirect('/layout')
+    # else:
+
+    #
+
+    return render_template('layout.html')
+    # redirect('/layout')
 
 # @app.route('/<user_id>/profile')
 # def show_profile(user_id):
@@ -62,7 +64,7 @@ def create_acct():
 @app.route('/layout/<restaurant_id>')
 def display_layout_page(restaurant_id):
     """Display layout Creation Page"""
-    restaurant_id = get_restaurant_by_restaurant_id(restaurant_id)
+    # restaurant_id = get_restaurant_by_restaurant_id(restaurant_id)
 
     return render_template("layout.html", restaurant_id=restaurant_id)
 
@@ -102,21 +104,34 @@ def display_res_page():
 def make_reservation():
     """Resrevation form submission response"""
 
-    res_size = request.form.get('res_size')
+    guest_name = request.form.get('guest_name')
+    phone_num = request.form.get('phone_num')
+    party_num = request.form.get('party_num')
+    res_date = request.form.get('res_date')
     res_time = request.form.get('res_time')
     res_notes = request.form.get('res_notes')
-    arrival_time = request.form.get('arrival_time')
-    end_time = request.form.get('end_time')
+    # arrival_time = request.form.get('arrival_time')
+    # end_time = request.form.get('end_time')
     booth_pref = request.form.get('booth_pref')
-    celebrating = request.form.get('celebrating')
-    phone_num = request.form.get('phone_num')
+    is_celebrating = request.form.get('is_celebrating')
+
+    if is_celebrating == "True":
+        is_celebrating = True
+    else:
+        is_celebrating = False
+
+    if booth_pref == "True":
+        booth_pref = True
+    else:
+        booth_pref = False
 
     # TODO Start time conditional -html?
-
     # TODO End time conditional- html?
     # TODO Bookings Full??
-    reservation = create_res(res_size=res_size, res_time=res_time, res_notes=res_notes, arrival_time=arrival_time,
-                             end_time=end_time, booth_pref=booth_pref, celebrating=celebrating, phone_num=phone_num)
+    guest = create_guest(phone_num=phone_num, guest_name=guest_name)
+
+    reservation = create_res(guest_id=guest.guest_id, party_num=party_num,  res_date=res_date, res_time=res_time,
+                             res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating)
 
     redirect('/make_res', reservation=reservation)
 

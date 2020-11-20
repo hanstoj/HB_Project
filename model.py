@@ -18,9 +18,10 @@ class Restaurant(db.Model):
     close_time = db.Column(db.Time)
 
     # NOTE: To convert time obj to a string in backend  time_str = str(time_obj)
+    dinning_table = db.relationship("Dinning_table")
 
     def __repr__(self):
-        return f'<Restaurant restaurant_id={self.restaurant_id} email={self.email} password={self.password} restaurant_name={self.restaurant_name}>'
+        return f'<Restaurant restaurant_id={self.restaurant_id} password={self.password} restaurant_name={self.restaurant_name}>'
 # resttest = Restaurant(username="user", password="password", restaurant_name="restaurant_name"
 
 
@@ -36,13 +37,14 @@ class Dinning_table(db.Model):
     is_taken = db.Column(db.Boolean)
     restaurant_id = db.Column(
         db.Integer, db.ForeignKey('restaurants.restaurant_id'))
-    # res_id = db.Column(db.Integer, db.ForeignKey('reservations.res_id'))
+    reservation_id = db.Column(
+        db.Integer, db.ForeignKey('reservations.res_id'))
 
-    restaurant = db.relationship('Restaurant', backref='tables')
-    # reservation = db.relationship('Reservation', backref='tables')
+    # restaurant = db.relationship('Restaurant')
+    # reservation = db.relationship('Reservation')
 
     def __repr__(self):
-        return f'<Dinner_Table table_id={self.table_id} table_num={self.table_num} booth={self.booth} restaurant_name={self.num_seats}table_status={self.table_status} table_hours={self.table_hours} restaurant_id={self.restaurant_id}>'
+        return f'<Dinning_table table_id={self.table_id} table_num={self.table_num} booth={self.booth} restaurant_name={self.num_seats}table_status={self.table_status} table_hours={self.table_hours} restaurant_id={self.restaurant_id}>'
 
 
 class Reservation(db.Model):
@@ -51,22 +53,24 @@ class Reservation(db.Model):
     __tablename__ = 'reservations'
 
     res_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    res_size = db.Column(db.Integer)
-    res_time = db.Column(db.DateTime)
+    guest_id = db.Column(db.Integer, db.ForeignKey('guests.guest_id'))
+    party_num = db.Column(db.Integer)
+    res_date = db.Column(db.DateTime)
+    res_time = db.Column(db.Time)
     arrival_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
     booth_pref = db.Column(db.Boolean)
     res_notes = db.Column(db.Text)
-    celebrating = db.Column(db.Boolean)
-    table_id = db.Column(db.Integer, db.ForeignKey('tables.table_id'))
-    phone_num = db.Column(db.String, db.ForeignKey('guests.phone_num'))
+    is_celebrating = db.Column(db.Boolean)
+    # table_id = db.Column(db.Integer, db.ForeignKey('tables.table_id'))
+    # phone_num = db.Column(db.String, db.ForeignKey('guests.phone_num'))
 
     guest = db.relationship('Guest')
     table = db.relationship('Dinning_table')
-    guest_stats = db.relationship('Guest_stat')
+    # guest_stats = db.relationship('Guest_stat')
 
     def __repr__(self):
-        return f'<Reservation res_id={self.res_id} res_size={self.res_size} phone_num={self.phone_num} res_size={self.res_size}res_time={self.res_time} arrival_time={self.arrival_time} end_time={self.end_time}booth_pref={self.booth_pref} res_notes={self.res_notes}table_id={self.table_id} celebrating={self.celebrating} >'
+        return f'<Reservation res_id={self.res_id} res_size={self.res_size} phone_num={self.phone_num} party_num={self.party_num}res_time={self.res_time} arrival_time={self.arrival_time} end_time={self.end_time}booth_pref={self.booth_pref} res_notes={self.res_notes}table_id={self.table_id} celebrating={self.is_celebrating} >'
 
 
 class Guest(db.Model):
@@ -75,14 +79,14 @@ class Guest(db.Model):
     __tablename__ = 'guests'
 
     guest_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String)
+    guest_name = db.Column(db.String)
     phone_num = db.Column(db.String, unique=True)
 
     reservation = db.relationship('Reservation')
     guest_stats = db.relationship('Guest_stat')
 
     def __repr__(self):
-        return f'<Reservation res_id={self.res_id} res_size={self.res_size} phone_num={self.phone_num}>'
+        return f'<Reservation res_size={self.res_size} phone_num={self.phone_num}>'
 # resttest = Restaurant(username="user", password="password", restaurant_name="restaurant_name")
 
 
@@ -97,10 +101,8 @@ class Guest_stat(db.Model):
     num_visits = db.Column(db.Integer, autoincrement=True)
     avg_time_spent = db.Column(db.DateTime)
     guest_id = db.Column(db.Integer, db.ForeignKey('guests.guest_id'))
-    res_id = db.Column(db.Integer, db.ForeignKey('reservations.res_id'))
 
     guest = db.relationship('Guest')
-    reservation = db.relationship('Reservation')
 
     # def __repr__(self):
     #     return f'<Guest_stats guest_stats_id={self.guest_stats_id} guest_notes={self.guest_notes}num_visits={self.num_visits} avg_time_spent={self.avg_time_spent}res_time={self.} phone_num={self.phone_num}>'

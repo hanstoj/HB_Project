@@ -26,7 +26,7 @@ for restaurant in range(5):
     # closing_time = datetime(2019, 1, 1, 0, 0, 0, 0)
 
     restaurant = model.Restaurant(
-        username=username, password=password, restaurant_name=restaurant_name)
+        username=username, password=password, restaurant_name=restaurant_name, open_time=None, close_time=None)
     model.db.session.add(restaurant)
     model.db.session.commit()
 

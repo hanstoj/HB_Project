@@ -1,4 +1,4 @@
-from model import db, Guest, Dinning_table, Restaurant, connect_to_db
+from model import db, Guest, Dinning_table, Restaurant, Reservation, connect_to_db
 
 # NOTE: Double check if Foreign key needs to be passed in as an argument? LIke resturant ID
 
@@ -32,16 +32,26 @@ def get_table_by_table_num(table_num):
     return Dinning_table.query.filter(Dinning_table.table_num == table_num).first()
 
 
-def create_res(res_size, res_time, res_notes, arrival_time, end_time, booth_pref, celebrating, phone_num):
+def create_res(guest_id, party_num, res_date, res_time, res_notes, booth_pref, is_celebrating,  end_time=None, arrival_time=None, table_id=None):
     """Create and return a restaurant."""
 
-    reservation = Restaurant(res_size=res_size, res_time=res_time, res_notes=res_notes, arrival_time=arrival_time,
-                             end_time=end_time, booth_pref=booth_pref, celebrating=celebrating, phone_num=phone_num)
-
+    reservation = Reservation(guest_id=guest_id, party_num=party_num, res_date=res_date, res_time=res_time, res_notes=res_notes,
+                              booth_pref=booth_pref, is_celebrating=is_celebrating,  end_time=end_time, arrival_time=arrival_time, table_id=table_id)
+    #  set table id? null to start with
     db.session.add(reservation)
     db.session.commit()
 
     return reservation
+
+
+def create_guest(phone_num, guest_name):
+
+    guest = Guest(phone_num=phone_num, guest_name=guest_name)
+
+    db.session.add(guest)
+    db.session.commit()
+
+    return guest
 
 
 def get_restaurant_by_username(username):
