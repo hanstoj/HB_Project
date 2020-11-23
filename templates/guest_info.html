@@ -4,9 +4,6 @@
 {% block body %}
   <h1>All Guests</h1>
     {% for guest in guests %}
-          <div class="square"></div>
-          {{ guest.name }} {{ guest.phone }} {{ guest.guest_notes}} {{ guest.num_visits }}
-          {{ guest_stats.avg_time_spent}}
-      </li>
+          <p>{{ guest.guest_name }} {{ guest.phone_num }} </p>
     {% endfor %}
 {% endblock %}

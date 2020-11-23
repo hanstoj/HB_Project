@@ -53,6 +53,16 @@ def create_guest(phone_num, guest_name):
     return guest
 
 
+def get_all_guests():
+
+    return Guest.query.all()
+
+
+def get_guest_by_id(guest_id):
+
+    return Guest.query.get(guest_id)
+
+
 def get_restaurant_by_username(username):
 
     return Restaurant.query.filter(Restaurant.username == username).first()

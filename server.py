@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables, create_guest
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables, create_guest, get_all_guests, get_guest_by_id
 
 
 from jinja2 import StrictUndefined
@@ -138,6 +138,13 @@ def make_reservation():
     return render_template('table_time.html', guest=guest,
                            reservation=reservation, tables=tables)
 
+
+@app.route('/guest_info')
+def display_guest_info():
+    """Display guest information Page"""
+    guests = get_all_guests()
+
+    return render_template("guest_info.html", guests=guests)
 
 # assign reservation
 # min in reservation start - min res end = avg res
