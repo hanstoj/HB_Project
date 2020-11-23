@@ -5,14 +5,15 @@
 {% block body %}
 <div class = "container" >
     <h1>Dinning Room</h1>
-
-    <ul>
       {% for table in tables %}
-        <li>
-            table number:{{ table.table_num }}  seats: {{ table.num_seats }} Is booth - {{ table.is_booth }}
-        </li>
+            {%if table.num_seats == 4%}
+                  <img class="tabletop" src="/static/4_top.png" alt="[]">
+                  <p> table number:{{ table.table_num }} </p>
+            {%elif table.num_seats == 2%}
+                  <img class= "tabletop" src="/static/2_top.png" alt= "x[]x">
+            {%endif%}
+
       {% endfor %}
-    </ul>
 </div>
 <a href="/make_res"> Make New Reservation </a>
 

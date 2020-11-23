@@ -3,14 +3,10 @@
 
 {% block body %}
   <h1>All Guests</h1>
-
-  <ul>
     {% for guest in guests %}
-      <li>
+          <div class="square"></div>
           {{ guest.name }} {{ guest.phone }} {{ guest.guest_notes}} {{ guest.num_visits }}
           {{ guest_stats.avg_time_spent}}
-        </a>
       </li>
     {% endfor %}
-  </ul>
 {% endblock %}

@@ -133,7 +133,10 @@ def make_reservation():
     reservation = create_res(guest_id=guest.guest_id, party_num=party_num,  res_date=res_date, res_time=res_time,
                              res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating)
 
-    redirect('/make_res', reservation=reservation)
+    tables = get_tables()
+
+    return render_template('table_time.html', guest=guest,
+                           reservation=reservation, tables=tables)
 
 
 # assign reservation
