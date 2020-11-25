@@ -40,7 +40,7 @@ def display_acct_page():
     return render_template("create_acct.html")
 
 
-@app.route('/create_acct', methods=['POST'])
+@app.route('/create_acct_form', methods=['POST'])
 def create_acct():
     """Create Acct"""
 
@@ -64,10 +64,19 @@ def create_acct():
     #     # return redirect('/layout')
     # else:
 
+    # render_template('layout.html')
+
+    return redirect('/layout/')
     #
 
-    return render_template('layout.html')
-    # redirect('/layout')
+# options: add cookie  - later in exp access
+# pull out id  -
+# add id as cookie
+# in addition /<restid> - if layout structured this way only accepts get or post
+# -flask cant read cookies
+
+
+# if redirect- layout -> restaurant id take with it
 
 # @app.route('/<user_id>/profile')
 # def show_profile(user_id):
@@ -81,7 +90,7 @@ def display_layout_page(restaurant_id):
     return render_template("layout.html", restaurant_id=restaurant_id)
 
 
-@ app.route('/layout', methods=['POST'])
+@ app.route('/layout_submit', methods=['POST'])
 def view_layout_page():
     """View Acct Page"""
     table_num = request.form.get('table_num')
@@ -158,6 +167,7 @@ def display_guest_info():
 
     return render_template("guest_info.html", guests=guests)
 
+
 # assign reservation
 # min in reservation start - min res end = avg res
 
@@ -182,7 +192,6 @@ def display_guest_info():
 # if arrival_time +delta? expected_min is < new arrival time?
 
 #
-
 if __name__ == '__main__':
     connect_to_db(app)
     app.run(host='0.0.0.0', debug=True)
