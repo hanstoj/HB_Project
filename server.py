@@ -25,6 +25,13 @@ def login_page():
 
     return render_template('log_in.html')
 
+# @app.route('/', methods=[POST])
+# def login_page():
+#     """View homepage."""
+
+
+#     return render_template('log_in.html')
+
 
 @app.route('/create_acct')
 def display_acct_page():
@@ -42,6 +49,11 @@ def create_acct():
     restaurant_name = request.form.get('restaurant_name')
     open_time = request.form.get('open_time')
     close_time = request.form.get('close_time')
+    confirm_password = request.form.get('confirm_password')
+
+    if password != confirm_password:
+        flash('passwords do not match.')
+        return render_template('create_acct.html')
 
     create_restaurant(username, restaurant_name,
                       password, open_time, close_time)
@@ -64,7 +76,7 @@ def create_acct():
 @app.route('/layout/<restaurant_id>')
 def display_layout_page(restaurant_id):
     """Display layout Creation Page"""
-    # restaurant_id = get_restaurant_by_restaurant_id(restaurant_id)
+    restaurant_id = get_restaurant_by_restaurant_id(restaurant_id)
 
     return render_template("layout.html", restaurant_id=restaurant_id)
 

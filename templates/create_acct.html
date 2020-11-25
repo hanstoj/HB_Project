@@ -6,6 +6,11 @@
     <title>Create TableTime Account</title>
 </head>
 <body>
+    {% for msg in get_flashed_messages() %}
+    <p class="flash-msg">
+      {{ msg }}
+    </p>
+    {% endfor %}
     <form action="/create_acct" method="POST">
         <div class="container">
             <div>
