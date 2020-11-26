@@ -18,7 +18,6 @@ class Restaurant(db.Model):
     close_time = db.Column(db.Time)
 
     # NOTE: To convert time obj to a string in backend  time_str = str(time_obj)
-    dinning_table = db.relationship("Dinning_table")
 
     def __repr__(self):
         return f'<Restaurant restaurant_id={self.restaurant_id} password={self.password} restaurant_name={self.restaurant_name}>'
@@ -34,17 +33,20 @@ class Dinning_table(db.Model):
     table_num = db.Column(db.String, unique=True)
     is_booth = db.Column(db.Boolean, default=True)
     num_seats = db.Column(db.Integer)
-    is_taken = db.Column(db.Boolean)
     restaurant_id = db.Column(
         db.Integer, db.ForeignKey('restaurants.restaurant_id'))
+    is_taken = db.Column(db.Boolean)
+
     reservation_id = db.Column(
         db.Integer, db.ForeignKey('reservations.res_id'))
+
+    restaurants = db.relationship("Restaurant", backref="tables")
 
     # restaurant = db.relationship('Restaurant')
     # reservation = db.relationship('Reservation')
 
     def __repr__(self):
-        return f'<Dinning_table table_id={self.table_id} table_num={self.table_num} booth={self.booth} restaurant_name={self.num_seats}table_status={self.table_status} table_hours={self.table_hours} restaurant_id={self.restaurant_id}>'
+        return f'<Dinning_table table_id={self.table_id} table_num={self.table_num} booth={self.is_booth} num_seats={self.num_seats}table_status={self.is_taken} restaurant_id={self.restaurant_id}>'
 
 
 class Reservation(db.Model):

@@ -16,10 +16,10 @@ def create_restaurant(username, restaurant_name,
     return restaurant
 
 
-def create_table(table_num, is_booth, num_seats, is_taken=False):
+def create_table(table_num, is_booth, num_seats, restaurant_id, is_taken=False):
     """Create Table in Restaurant"""
     table = Dinning_table(table_num=table_num, is_booth=is_booth,
-                          num_seats=num_seats, is_taken=is_taken)
+                          num_seats=num_seats, restaurant_id=restaurant_id, is_taken=is_taken)
 
     db.session.add(table)
     db.session.commit()
@@ -73,6 +73,56 @@ def get_restaurant_by_restaurant_id(restaurant_id):
     return Restaurant.query.get(restaurant_id)
 
 
-def get_tables():
+def reservation_by_id(reservation_id):
 
-    return Dinning_table.query.all()
+    return Restaurant.query.get(reservation_id)
+
+
+def get_tables_by_restaurant_id(restaurant_id):
+
+    # NOTE: changed it from .all() to .first()
+    return Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).options(db.joinedload("tables")).first()
+
+
+# def reservation_assignment(reservation_id):
+#     if table_seats < reservation.party_num:
+#         seats = True
+
+#     if is_taken = False:
+#         not_taken = True
+    #   if res_date == datetime.today()
+
+
+# >>> datetime.now()
+# datetime.datetime(2020, 11, 24, 23, 54, 52, 15333)
+# >>> datetime.today()
+# datetime.datetime(2020, 11, 24, 23, 54, 58, 89993)
+
+# 'res_date': '2020-11-25',
+
+# >>> date.today()
+# datetime.date(2020, 11, 25)
+
+
+# assign reservation
+# min in reservation start - min res end = avg res
+
+# expected table stay = 45
+
+# if party_num in range 6+:
+#     expected table stay +15
+
+# if celebrating
+#     expected table stay +20:
+
+
+# total = end - arrival
+# dinning_speed =  total - expected
+
+
+# assigning table
+# if num_seats - res_size > 0:
+
+# if is_taken = False
+
+# if arrival_time +delta? expected_min is < new arrival time?

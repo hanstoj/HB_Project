@@ -5,7 +5,7 @@
 {% block body %}
 <div class = "container" >
     <h1>Dinning Room</h1>
-      {% for table in tables %}
+      {% for table in tables.tables %}
             {%if table.num_seats == 4%}
                   <img class="tabletop" src="/static/4_top.png" alt="[]">
                   <p> table number:{{ table.table_num }} </p>

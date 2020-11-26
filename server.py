@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables, create_guest, get_all_guests, get_guest_by_id
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id
 
 
 from jinja2 import StrictUndefined
@@ -11,19 +11,32 @@ app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
 
 
-@app.route('/home')
-def TableTime():
-    """View homepage."""
-    tables = get_tables()
-
-    return render_template('table_time.html', tables=tables)
-
-
 @app.route('/')
 def login_page():
-    """View homepage."""
-
+    """View Login."""
+    #
     return render_template('log_in.html')
+
+
+@app.route('/login_form', methods=['POST'])
+def login_form_submit():
+    """Submit login form."""
+    # username = request.form.get('username')
+    # password = request.form.get('password')
+
+    # restaurant = get_restaurant_by_username(username)
+    # if restaurant.password == password:
+    #     session['restaurant'] = restaurant.restaurant_id
+
+    # else:
+    #     flash('Logged in')
+
+    # #
+    # #     session['restaurant_id']= restaurant.restaurant
+    # tables = get_tables_()
+
+    return render_template('table_time.html', )
+
 
 # @app.route('/', methods=[POST])
 # def login_page():
@@ -58,16 +71,40 @@ def create_acct():
     create_restaurant(username, restaurant_name,
                       password, open_time, close_time)
 
+    this_restaurant = get_restaurant_by_username(username)
+
+    session['restaurant_id'] = this_restaurant.restaurant_id
+
+    # restaurant = get_restaurant_by_restaurant_id(session['restaurant_id'])
+
     # restaurant = get_restaurant_by_username(username)
     # if restaurant:
     #     flash('Cannot create an account with that email. Try again.')
     #     # return redirect('/layout')
     # else:
 
-    # render_template('layout.html')
-
+    # render_temp late('layout.html')
+    # pass in rest id as variable
     return redirect('/layout/')
     #
+
+
+@app.route('/home')
+def TableTime():
+    """View homepage."""
+    restaurant_id = session['restaurant_id']
+
+    print()
+    print("THE RESTAURANT_ID IS:", restaurant_id)
+
+    tables = get_tables_by_restaurant_id(restaurant_id)
+    print()
+    print("THE TABLES SHOWN ARE:", tables)
+    print(tables)
+    print()
+
+    return render_template('table_time.html', tables=tables)
+
 
 # options: add cookie  - later in exp access
 # pull out id  -
@@ -81,21 +118,26 @@ def create_acct():
 # @app.route('/<user_id>/profile')
 # def show_profile(user_id):
 
-
-@app.route('/layout/<restaurant_id>')
-def display_layout_page(restaurant_id):
+# <restaurant_id>
+@app.route('/layout/')
+def display_layout_page():
     """Display layout Creation Page"""
-    restaurant_id = get_restaurant_by_restaurant_id(restaurant_id)
+
+    restaurant_id = session['restaurant_id']
 
     return render_template("layout.html", restaurant_id=restaurant_id)
 
 
-@ app.route('/layout_submit', methods=['POST'])
+@ app.route('/layout_submit/', methods=['POST'])
 def view_layout_page():
     """View Acct Page"""
     table_num = request.form.get('table_num')
     is_booth = request.form.get('is_booth')
     num_seats = request.form.get('num_seats')
+    restaurant_id = session['restaurant_id']
+
+    # options: grab from cookie
+    # add invisible form
 
     if is_booth == "True":
         is_booth = True
@@ -107,7 +149,7 @@ def view_layout_page():
         flash('Table number already exists cannot create')
     else:
         create_table(table_num=table_num,
-                     is_booth=is_booth, num_seats=num_seats)
+                     is_booth=is_booth, num_seats=num_seats, restaurant_id=restaurant_id)
         flash('Table was created')
         #
         # TODO create visual table
@@ -153,8 +195,8 @@ def make_reservation():
 
     reservation = create_res(guest_id=guest.guest_id, party_num=party_num,  res_date=res_date, res_time=res_time,
                              res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating)
-
-    tables = get_tables()
+    restaurant_id = session['restaurant_id']
+    tables = get_tables_by_restaurant_id(restaurant_id)
 
     return render_template('table_time.html', guest=guest,
                            reservation=reservation, tables=tables)
