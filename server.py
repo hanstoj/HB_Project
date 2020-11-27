@@ -2,7 +2,7 @@ from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db
 from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id
-
+from dateutil import parser
 
 from jinja2 import StrictUndefined
 
@@ -207,7 +207,7 @@ def display_guest_info():
     """Display guest information Page"""
 
     guests = get_all_guests()
-
+    # sort by restaurant
     return render_template("guest_info.html", guests=guests)
 
 

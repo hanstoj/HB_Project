@@ -1,5 +1,5 @@
 from model import db, Guest, Dinning_table, Restaurant, Reservation, connect_to_db
-
+from dateutil import parser
 # NOTE: Double check if Foreign key needs to be passed in as an argument? LIke resturant ID
 
 
@@ -7,7 +7,17 @@ def create_restaurant(username, restaurant_name,
                       password, open_time, close_time):
     #    )
     """Create and return a restaurant."""
-    # TODO fix time-
+    # TODO fix time
+    print(f'open_time {open_time}')
+    print("")
+    print("")
+    print(f'type close before parse{type(close_time)}')
+    open_time = parser.parse(open_time)
+    close_time = parser.parse(close_time)
+    print(f'check parsing method {close_time}')
+    print(f'type{type(close_time)}')
+    print("")
+    print(f'close_time {close_time}')
     restaurant = Restaurant(username=username, restaurant_name=restaurant_name,
                             password=password, open_time=open_time, close_time=close_time)
     db.session.add(restaurant)
