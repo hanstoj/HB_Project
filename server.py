@@ -89,35 +89,6 @@ def create_acct():
     #
 
 
-@app.route('/home')
-def TableTime():
-    """View homepage."""
-    restaurant_id = session['restaurant_id']
-
-    print()
-    print("THE RESTAURANT_ID IS:", restaurant_id)
-
-    tables = get_tables_by_restaurant_id(restaurant_id)
-    print()
-    print("THE TABLES SHOWN ARE:", tables)
-    print(tables)
-    print()
-
-    return render_template('table_time.html', tables=tables)
-
-
-# options: add cookie  - later in exp access
-# pull out id  -
-# add id as cookie
-# in addition /<restid> - if layout structured this way only accepts get or post
-# -flask cant read cookies
-
-
-# if redirect- layout -> restaurant id take with it
-
-# @app.route('/<user_id>/profile')
-# def show_profile(user_id):
-
 # <restaurant_id>
 @app.route('/layout/')
 def display_layout_page():
@@ -152,9 +123,38 @@ def view_layout_page():
                      is_booth=is_booth, num_seats=num_seats, restaurant_id=restaurant_id)
         flash('Table was created')
         #
-        # TODO create visual table
+        # TODO fix flash
     return render_template('layout.html')
 
+
+@app.route('/TableTime')
+def TableTime():
+    """View homepage."""
+    restaurant_id = session['restaurant_id']
+
+    print()
+    print("THE RESTAURANT_ID IS:", restaurant_id)
+
+    tables = get_tables_by_restaurant_id(restaurant_id)
+    print()
+    print("THE TABLES SHOWN ARE:", tables)
+    print(tables)
+    print()
+
+    return render_template('table_time.html', tables=tables)
+
+
+# options: add cookie  - later in exp access
+# pull out id  -
+# add id as cookie
+# in addition /<restid> - if layout structured this way only accepts get or post
+# -flask cant read cookies
+
+
+# if redirect- layout -> restaurant id take with it
+
+# @app.route('/<user_id>/profile')
+# def show_profile(user_id):
 
 @app.route('/make_res')
 def display_res_page():

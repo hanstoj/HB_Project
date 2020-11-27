@@ -11,11 +11,15 @@
                   <p> table number:{{ table.table_num }} </p>
             {%elif table.num_seats == 2%}
                   <img class= "tabletop" src="/static/2_top.png" alt= "x[]x">
+                  <p> table number:{{ table.table_num }} </p>
+            {%else%}
+                  <img class="tabletop" src="/static/4_top.png" alt="[]">
+                  <p> table number:{{ table.table_num }} </p>
             {%endif%}
-
       {% endfor %}
 </div>
 <a href="/make_res"> Make New Reservation </a>
+<br>
 <a href="/guest_info"> View Guest Information</a>
 
 
