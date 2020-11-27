@@ -94,9 +94,9 @@ def create_acct():
 def display_layout_page():
     """Display layout Creation Page"""
 
-    restaurant_id = session['restaurant_id']
+    # restaurant_id = session['restaurant_id']
 
-    return render_template("layout.html", restaurant_id=restaurant_id)
+    return render_template("layout.html")
 
 
 @ app.route('/layout_form/', methods=['POST'])

@@ -45,6 +45,19 @@ def get_table_by_table_num(table_num):
 def create_res(guest_id, party_num, res_date, res_time, res_notes, booth_pref, is_celebrating,  end_time=None, arrival_time=None):
     """Create and return a restaurant."""
 
+    print("")
+    print("")
+    print(f'type res_date before parse{type(res_date)}')
+    res_date = parser.parse(res_date)
+    res_time = parser.parse(res_time)
+    print(f'check parsing method res_date {res_date}')
+    print(f'type{type(res_date)}')
+    print(f'check parsing method res_time {res_time}')
+    print(f'type{type(res_time)}')
+    print("")
+    print("")
+    print("")
+
     reservation = Reservation(guest_id=guest_id, party_num=party_num, res_date=res_date, res_time=res_time, res_notes=res_notes,
                               booth_pref=booth_pref, is_celebrating=is_celebrating,  end_time=end_time, arrival_time=arrival_time)
     db.session.add(reservation)
