@@ -5,18 +5,18 @@
 {% block body %}
 <div class = "container" >
     <h1>Dinning Room</h1>
-      {% for table in tables.tables %}
-            {%if table.num_seats == 4%}
-                  <img class="tabletop" src="/static/4_top.png" alt="[]">
-                  <p> table number:{{ table.table_num }} </p>
-            {%elif table.num_seats == 2%}
-                  <img class= "tabletop" src="/static/2_top.png" alt= "x[]x">
-                  <p> table number:{{ table.table_num }} </p>
-            {%else%}
-                  <img class="tabletop" src="/static/4_top.png" alt="[]">
-                  <p> table number:{{ table.table_num }} </p>
-            {%endif%}
-      {% endfor %}
+            {% for table in tables.tables %}
+                  {%if table.num_seats == 4%}
+                        <img class="tabletop" src="/static/4_top.png" alt="[]">
+                        <p> table number:{{ table.table_num }} </p>
+                  {%elif table.num_seats == 2%}
+                        <img class= "tabletop" src="/static/2_top.png" alt= "x[]x">
+                        <p> table number:{{ table.table_num }} </p>
+                  {%else%}
+                        <img class="tabletop" src="/static/4_top.png" alt="[]">
+                        <p> table number:{{ table.table_num }} </p>
+                  {%endif%}
+            {% endfor %}
 </div>
 <a href="/make_res"> Make New Reservation </a>
 <br>

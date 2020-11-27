@@ -99,7 +99,7 @@ def display_layout_page():
     return render_template("layout.html", restaurant_id=restaurant_id)
 
 
-@ app.route('/layout_submit/', methods=['POST'])
+@ app.route('/layout_form/', methods=['POST'])
 def view_layout_page():
     """View Acct Page"""
     table_num = request.form.get('table_num')
@@ -163,7 +163,7 @@ def display_res_page():
     return render_template("make_res.html")
 
 
-@ app.route('/make_res', methods=['POST'])
+@ app.route('/make_res_form', methods=['POST'])
 def make_reservation():
     """Resrevation form submission response"""
 
@@ -205,6 +205,7 @@ def make_reservation():
 @app.route('/guest_info')
 def display_guest_info():
     """Display guest information Page"""
+
     guests = get_all_guests()
 
     return render_template("guest_info.html", guests=guests)
