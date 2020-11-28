@@ -1,5 +1,8 @@
 from model import db, Guest, Dinning_table, Restaurant, Reservation, connect_to_db
 from dateutil import parser
+from dateutil.parser import parse
+from datetime import datetime, time
+
 # NOTE: Double check if Foreign key needs to be passed in as an argument? LIke resturant ID
 
 
@@ -12,8 +15,9 @@ def create_restaurant(username, restaurant_name,
     print("")
     print("")
     print(f'type close before parse{type(close_time)}')
-    open_time = parser.parse(open_time)
-    close_time = parser.parse(close_time)
+
+    open_time = parse(open_time).time()
+    close_time = parse(close_time).time()
     print(f'check parsing method {close_time}')
     print(f'type{type(close_time)}')
     print("")
@@ -66,14 +70,23 @@ def create_res(guest_id, party_num, res_date, res_time, res_notes, booth_pref, i
     return reservation
 
 
-def create_guest(phone_num, guest_name):
+def create_guest(phone_num, guest_name, avg_time_spent=time(00, 45, 00), num_visits=0):
+    print("")
+    print("")
+    print(f"avg time spent{avg_time_spent} ")
 
-    guest = Guest(phone_num=phone_num, guest_name=guest_name)
+    guest = Guest(phone_num=phone_num, guest_name=guest_name,
+                  avg_time_spent=avg_time_spent, num_visits=num_visits)
 
     db.session.add(guest)
     db.session.commit()
 
     return guest
+
+
+# def get_guest_by_phone_num(phone_num):
+
+#     return Guest.query.
 
 
 def get_all_guests():
@@ -107,45 +120,55 @@ def get_tables_by_restaurant_id(restaurant_id):
     return Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).options(db.joinedload("tables")).first()
 
 
-# def reservation_assignment(reservation_id):
-#     if table_seats < reservation.party_num:
-#         seats = True
+def date_match(res_date):
 
-#     if is_taken = False:
-#         not_taken = True
+    if (datetime.today() - res_date).days == 0:
+        return print("date match")
+
+
+# def table_match():
+
+    # if table_seats >= party_num:
+    #     print("seats match")
+
+    # if booth_pref == is_booth:
+    #     print("booth match")
+
+    # def reservation_assignment(reservation_id):
+    #     if table_seats < reservation.party_num:
+    #         seats = True
+
+    #     if is_taken = False:
+    #         not_taken = True
     #   if res_date == datetime.today()
 
+    # >>> datetime.now()
+    # datetime.datetime(2020, 11, 24, 23, 54, 52, 15333)
+    # >>> datetime.today()
+    # datetime.datetime(2020, 11, 24, 23, 54, 58, 89993)
 
-# >>> datetime.now()
-# datetime.datetime(2020, 11, 24, 23, 54, 52, 15333)
-# >>> datetime.today()
-# datetime.datetime(2020, 11, 24, 23, 54, 58, 89993)
+    # 'res_date': '2020-11-25',
 
-# 'res_date': '2020-11-25',
+    # >>> date.today()
+    # datetime.date(2020, 11, 25)
 
-# >>> date.today()
-# datetime.date(2020, 11, 25)
+    # assign reservation
+    # min in reservation start - min res end = avg res
 
+    # expected table stay = 45
 
-# assign reservation
-# min in reservation start - min res end = avg res
+    # if party_num in range 6+:
+    #     expected table stay +15
 
-# expected table stay = 45
+    # if celebrating
+    #     expected table stay +20:
 
-# if party_num in range 6+:
-#     expected table stay +15
+    # total = end - arrival
+    # dinning_speed =  total - expected
 
-# if celebrating
-#     expected table stay +20:
+    # assigning table
+    # if num_seats - res_size > 0:
 
+    # if is_taken = False
 
-# total = end - arrival
-# dinning_speed =  total - expected
-
-
-# assigning table
-# if num_seats - res_size > 0:
-
-# if is_taken = False
-
-# if arrival_time +delta? expected_min is < new arrival time?
+    # if arrival_time +delta? expected_min is < new arrival time?

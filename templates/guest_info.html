@@ -4,7 +4,7 @@
 {% block body %}
   <h1>All Guests</h1>
     {% for guest in guests %}
-          <p>{{ guest.guest_name }} {{ guest.phone_num }} </p>
+          <p>{{ guest.guest_name }}  phone number:{{ guest.phone_num }} avg dining time: {{guest.avg_time_spent}} number of visits: {{guest.num_visits}}</p>
     {% endfor %}
 
   <a href="/TableTime"> Return Home </a>

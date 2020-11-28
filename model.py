@@ -30,7 +30,7 @@ class Dinning_table(db.Model):
     __tablename__ = 'tables'
 
     table_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    table_num = db.Column(db.String, unique=True)
+    table_num = db.Column(db.String)
     is_booth = db.Column(db.Boolean, default=True)
     num_seats = db.Column(db.Integer)
     restaurant_id = db.Column(
@@ -57,7 +57,7 @@ class Reservation(db.Model):
     res_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     guest_id = db.Column(db.Integer, db.ForeignKey('guests.guest_id'))
     party_num = db.Column(db.Integer)
-    res_date = db.Column(db.DateTime)
+    res_date = db.Column(db.Date)
     res_time = db.Column(db.Time)
     arrival_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
@@ -83,28 +83,30 @@ class Guest(db.Model):
     guest_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     guest_name = db.Column(db.String)
     phone_num = db.Column(db.String, unique=True)
+    avg_time_spent = db.Column(db.Time)
+    num_visits = db.Column(db.Integer)
 
     reservation = db.relationship('Reservation')
-    guest_stats = db.relationship('Guest_stat')
+    # guest_stats = db.relationship('Guest_stat')
 
     def __repr__(self):
         return f'<Reservation res_size={self.res_size} phone_num={self.phone_num}>'
 # resttest = Restaurant(username="user", password="password", restaurant_name="restaurant_name")
 
 
-class Guest_stat(db.Model):
-    """A Guest's stats."""
+# class Guest_stat(db.Model):
+#     """A Guest's stats."""
 
-    __tablename__ = 'guest_stats'
+#     __tablename__ = 'guest_stats'
 
-    guest_stats_id = db.Column(
-        db.Integer, autoincrement=True, primary_key=True)
-    guest_notes = db.Column(db.String, unique=True)
-    num_visits = db.Column(db.Integer, autoincrement=True)
-    avg_time_spent = db.Column(db.DateTime)
-    guest_id = db.Column(db.Integer, db.ForeignKey('guests.guest_id'))
+#     guest_stats_id = db.Column(
+#         db.Integer, autoincrement=True, primary_key=True)
+#     guest_notes = db.Column(db.String, unique=True)
+#     num_visits = db.Column(db.Integer)
+#     avg_time_spent = db.Column(db.DateTime)
+#     guest_id = db.Column(db.Integer, db.ForeignKey('guests.guest_id'))
 
-    guest = db.relationship('Guest')
+#     guest = db.relationship('Guest')
 
     # def __repr__(self):
     #     return f'<Guest_stats guest_stats_id={self.guest_stats_id} guest_notes={self.guest_notes}num_visits={self.num_visits} avg_time_spent={self.avg_time_spent}res_time={self.} phone_num={self.phone_num}>'
