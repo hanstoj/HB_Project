@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id, date_match, expected_time
 from dateutil import parser
 
 from jinja2 import StrictUndefined
@@ -178,6 +178,18 @@ def make_reservation():
     booth_pref = request.form.get('booth_pref')
     is_celebrating = request.form.get('is_celebrating')
 
+    print("")
+    print("")
+    print(f'type res_date before parse{type(res_date)}')
+    res_date = parser.parse(res_date)
+    res_time = parser.parse(res_time)
+    print(f'check parsing method res_date {res_date}')
+    print(f'type{type(res_date)}')
+    print(f'check parsing method res_time {res_time}')
+    print(f'type{type(res_time)}')
+    print("")
+    print("")
+
     if is_celebrating == "True":
         is_celebrating = True
     else:
@@ -191,13 +203,21 @@ def make_reservation():
     # TODO Start time conditional -html?
     # TODO End time conditional- html?
     # TODO Bookings Full??
+    date_match(res_date)
+
+    print('')
     guest = create_guest(phone_num=phone_num, guest_name=guest_name)
-
-    reservation = create_res(guest_id=guest.guest_id, party_num=party_num,  res_date=res_date, res_time=res_time,
-                             res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating)
     restaurant_id = session['restaurant_id']
-    tables = get_tables_by_restaurant_id(restaurant_id)
+    reservation = create_res(guest_id=guest.guest_id, restaurant_id=restaurant_id, party_num=party_num,  res_date=res_date, res_time=res_time,
+                             res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating)
 
+    tables = get_tables_by_restaurant_id(restaurant_id)
+    print('')
+    print("THE TABLES SHOWN ARE:", tables)
+    print('')
+    print('')
+
+    expected_time(tables, party_num, is_celebrating)
     return render_template('table_time.html', guest=guest,
                            reservation=reservation, tables=tables)
 

@@ -46,23 +46,23 @@ def get_table_by_table_num(table_num):
     return Dinning_table.query.filter(Dinning_table.table_num == table_num).first()
 
 
-def create_res(guest_id, party_num, res_date, res_time, res_notes, booth_pref, is_celebrating,  end_time=None, arrival_time=None):
+def create_res(guest_id, restaurant_id, party_num, res_date, res_time, res_notes, booth_pref, is_celebrating,  end_time=None, arrival_time=None):
     """Create and return a restaurant."""
 
-    print("")
-    print("")
-    print(f'type res_date before parse{type(res_date)}')
-    res_date = parser.parse(res_date)
-    res_time = parser.parse(res_time)
-    print(f'check parsing method res_date {res_date}')
-    print(f'type{type(res_date)}')
-    print(f'check parsing method res_time {res_time}')
-    print(f'type{type(res_time)}')
-    print("")
-    print("")
+    # print("")
+    # print("")
+    # print(f'type res_date before parse{type(res_date)}')
+    # res_date = parser.parse(res_date)
+    # res_time = parser.parse(res_time)
+    # print(f'check parsing method res_date {res_date}')
+    # print(f'type{type(res_date)}')
+    # print(f'check parsing method res_time {res_time}')
+    # print(f'type{type(res_time)}')
+    # print("")
+    # print("")
     print("")
 
-    reservation = Reservation(guest_id=guest_id, party_num=party_num, res_date=res_date, res_time=res_time, res_notes=res_notes,
+    reservation = Reservation(guest_id=guest_id, restaurant_id=restaurant_id, party_num=party_num, res_date=res_date, res_time=res_time, res_notes=res_notes,
                               booth_pref=booth_pref, is_celebrating=is_celebrating,  end_time=end_time, arrival_time=arrival_time)
     db.session.add(reservation)
     db.session.commit()
@@ -124,6 +124,10 @@ def date_match(res_date):
 
     if (datetime.today() - res_date).days == 0:
         return print("date match")
+
+
+def expected_time(tables, party_num, is_celebrating):
+    return print(tables)
 
 
 # def table_match():

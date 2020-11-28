@@ -56,6 +56,8 @@ class Reservation(db.Model):
 
     res_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     guest_id = db.Column(db.Integer, db.ForeignKey('guests.guest_id'))
+    restaurant_id = db.Column(
+        db.Integer, db.ForeignKey('restaurants.restaurant_id'))
     party_num = db.Column(db.Integer)
     res_date = db.Column(db.Date)
     res_time = db.Column(db.Time)
@@ -64,9 +66,10 @@ class Reservation(db.Model):
     booth_pref = db.Column(db.Boolean)
     res_notes = db.Column(db.Text)
     is_celebrating = db.Column(db.Boolean)
+
     # table_id = db.Column(db.Integer, db.ForeignKey('tables.table_id'))
     # phone_num = db.Column(db.String, db.ForeignKey('guests.phone_num'))
-
+    restaurant = db.relationship('Restaurant')
     guest = db.relationship('Guest')
     table = db.relationship('Dinning_table')
     # guest_stats = db.relationship('Guest_stat')
