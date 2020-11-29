@@ -200,24 +200,27 @@ def make_reservation():
     else:
         booth_pref = False
 
-    # TODO Start time conditional -html?
-    # TODO End time conditional- html?
-    # TODO Bookings Full??
+    # TODO Start time conditional -html??
+    # TODO End time conditional- html??
+    # TODO Bookings Full??? Needs to all occur here to prevent false booking
+
     date_match(res_date)
 
     print('')
     guest = create_guest(phone_num=phone_num, guest_name=guest_name)
+
     restaurant_id = session['restaurant_id']
+
     reservation = create_res(guest_id=guest.guest_id, restaurant_id=restaurant_id, party_num=party_num,  res_date=res_date, res_time=res_time,
                              res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating)
 
     tables = get_tables_by_restaurant_id(restaurant_id)
-    print('')
-    print("THE TABLES SHOWN ARE:", tables)
-    print('')
-    print('')
+    # print('')
+    # print("THE TABLES SHOWN ARE:", tables)
+    # print('')
+    # print('')
 
-    expected_time(tables, party_num, is_celebrating)
+    # expected_time(party_num, is_celebrating, reservation.avg_time_spent)
     return render_template('table_time.html', guest=guest,
                            reservation=reservation, tables=tables)
 

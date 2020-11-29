@@ -1,7 +1,7 @@
 from model import db, Guest, Dinning_table, Restaurant, Reservation, connect_to_db
 from dateutil import parser
 from dateutil.parser import parse
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 
 # NOTE: Double check if Foreign key needs to be passed in as an argument? LIke resturant ID
 
@@ -73,7 +73,7 @@ def create_res(guest_id, restaurant_id, party_num, res_date, res_time, res_notes
 def create_guest(phone_num, guest_name, avg_time_spent=time(00, 45, 00), num_visits=0):
     print("")
     print("")
-    print(f"avg time spent{avg_time_spent} ")
+    print(f"avg time spent {avg_time_spent} ")
 
     guest = Guest(phone_num=phone_num, guest_name=guest_name,
                   avg_time_spent=avg_time_spent, num_visits=num_visits)
@@ -126,8 +126,16 @@ def date_match(res_date):
         return print("date match")
 
 
-def expected_time(tables, party_num, is_celebrating):
-    return print(tables)
+# def expected_time(party_num, is_celebrating, avg_time_spent):
+#     expected = avg_time_spent
+
+#     if party_num > 6:
+#         expected = expected + timedelta(minutes=20)
+
+#     if is_celebrating:
+#         expected = expected + timedelta(minutes=20)
+
+#     return print(expected)
 
 
 # def table_match():
