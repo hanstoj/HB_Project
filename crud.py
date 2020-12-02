@@ -1,6 +1,7 @@
 from model import db, Guest, Dinning_table, Restaurant, Reservation, connect_to_db
 from dateutil import parser
 from dateutil.parser import parse
+from arrow import arrow
 from datetime import datetime, time, timedelta
 
 # NOTE: Double check if Foreign key needs to be passed in as an argument? LIke resturant ID
@@ -176,10 +177,29 @@ def check_logic():
     if party <= seats and booth == is_booth:
         print(f'first logic passed')
 
-    time_test = start_time + timedelta(minutes=time_expected)
-    print(f"time test {time_test}")
+    finish_time = start_time + timedelta(minutes=time_expected)
+    print(f"start time {start_time}")
+    print(f"finish time {finish_time}")
+
+    print(arrow.Arrow.span_range(start_time, finish_time))
 
     return print(f"function complete")
+# reservation org by t stamps
+# pull time query search  % starts
+# % fr table id set all table res for res at 7 pull those that meet criteria look through table check if reservered
+# lean into accessibility contrast these presentages
+# accessibility fonts
+# 2 type faces
+# font pairing websites
+# photo rabbit hole
+# routes that have it if not session cookie ad boot to log in
+#  middle wear
+#  pick something found to be the meatiest or an issue
+#  spend a few minute on intro
+#  highlight what is different what makes uou different prior watress go into intresting bit you liked or enhoyed
+#  more unique what and how  make connection to form uniqunes what is importaint for reservations core
+#  index pull data  take notes of aha moments.
+#  read me for everythong
 
 
 # def get_
