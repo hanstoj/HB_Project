@@ -61,8 +61,8 @@ class Reservation(db.Model):
     party_num = db.Column(db.Integer)
     res_date = db.Column(db.Date)
     res_time = db.Column(db.Time)
-    arrival_time = db.Column(db.DateTime)
-    end_time = db.Column(db.DateTime)
+    arrival_time = db.Column(db.Time)
+    end_time = db.Column(db.Time)
     booth_pref = db.Column(db.Boolean)
     res_notes = db.Column(db.Text)
     is_celebrating = db.Column(db.Boolean)
@@ -75,7 +75,7 @@ class Reservation(db.Model):
     # guest_stats = db.relationship('Guest_stat')
 
     def __repr__(self):
-        return f'<Reservation res_id={self.res_id} res_size={self.res_size} phone_num={self.phone_num} party_num={self.party_num}res_time={self.res_time} arrival_time={self.arrival_time} end_time={self.end_time}booth_pref={self.booth_pref} res_notes={self.res_notes}table_id={self.table_id} celebrating={self.is_celebrating} >'
+        return f'<Reservation res_id={self.res_id} party_num={self.party_num} res_time={self.res_time} arrival_time={self.arrival_time} end_time={self.end_time}booth_pref={self.booth_pref} res_notes={self.res_notes}  celebrating={self.is_celebrating} >'
 
 
 class Guest(db.Model):
@@ -86,7 +86,7 @@ class Guest(db.Model):
     guest_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     guest_name = db.Column(db.String)
     phone_num = db.Column(db.String, unique=True)
-    avg_time_spent = db.Column(db.Time)
+    avg_time_spent = db.Column(db.Integer)
     num_visits = db.Column(db.Integer)
 
     reservation = db.relationship('Reservation')

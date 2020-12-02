@@ -70,11 +70,11 @@ def create_res(guest_id, restaurant_id, party_num, res_date, res_time, res_notes
     return reservation
 
 
-def create_guest(phone_num, guest_name, avg_time_spent=time(00, 45, 00), num_visits=0):
+def create_guest(phone_num, guest_name, avg_time_spent=45, num_visits=0):
     print("")
     print("")
     print(f"avg time spent {avg_time_spent} ")
-
+    print(f"avg time spent {type(avg_time_spent)} ")
     guest = Guest(phone_num=phone_num, guest_name=guest_name,
                   avg_time_spent=avg_time_spent, num_visits=num_visits)
 
@@ -126,61 +126,141 @@ def date_match(res_date):
         return print("date match")
 
 
-# def expected_time(party_num, is_celebrating, avg_time_spent):
-#     expected = avg_time_spent
+def get_guest_by_phone_num(phone_num):
 
-#     if party_num > 6:
-#         expected = expected + timedelta(minutes=20)
+    return Guest.query.get(phone_num)
 
-#     if is_celebrating:
-#         expected = expected + timedelta(minutes=20)
 
-#     return print(expected)
+def expected_time(party_num, is_celebrating, avg_time_spent):
 
+    print(f"{party_num}, {is_celebrating}, {avg_time_spent}")
+
+    expected = avg_time_spent
+
+    if int(party_num) > 5:
+        expected = expected + 20
+        print(f"over 6 expected update: {expected}")
+    if is_celebrating:
+        expected = expected + 20
+        print(f"is celebraing update: {expected}")
+
+    return print(f"minutes of time: {expected}")
+
+
+# def save_expected_time(party_num,is_celebrating, avg_time_spent, guest_id, end_time):
+
+
+def get_pending_reservations_by_restaurant(restaurant_id):
+
+    return Reservation.query.filter(Reservation.arrival_time == None, restaurant_id == restaurant_id).all()
+
+
+def get_current_reservations_by_restaurant(restaurant_id):
+
+    return Reservation.query.filter(Reservation.arrival_time != None, Reservation.end_time == None, restaurant_id == restaurant_id).all()
+
+
+def get_past_reservations_by_restaurant(restaurant_id):
+
+    return Reservation.query.filter(Reservation.arrival_time != None, Reservation.end_time != None, restaurant_id == restaurant_id).all()
+
+
+def check_logic():
+    party = 4
+    seats = 4
+    booth = True
+    is_booth = True
+    time_expected = 45
+    start_time = datetime.now()
+
+    if party <= seats and booth == is_booth:
+        print(f'first logic passed')
+
+    time_test = start_time + timedelta(minutes=time_expected)
+    print(f"time test {time_test}")
+
+    return print(f"function complete")
+
+
+# def get_
+
+# def seating_order():
+
+# slack_time = ( res_time - seated_time - e' )
+# if table open from arrivaltime to expected end seat table
+#
+# for table where requirements met
+
+# if table is open from time to time
+# reserve table
+
+# while True:
+
+#     if task_queue.is_empty():
+#         next_task = None
+#     else:
+#         next_task = task_queue.peek()
+
+#     print("Next task:", next_task)
+
+#     command = input("A)dd task, D)o first task, or Q)uit? ")
+
+#     if command == "A":
+#         task = input("Task: ")
+#         task_queue.enqueue(task)
+
+#     elif command == "D":
+#         print("Completed:", task_queue.dequeue())
+
+#     elif command == "Q":
+#         break
+
+#     else:
+#         print("*** Invalid command; try again ***")
 
 # def table_match():
 
-    # if table_seats >= party_num:
-    #     print("seats match")
+# if table_seats >= party_num:
+#     print("seats match")
 
-    # if booth_pref == is_booth:
-    #     print("booth match")
+# if booth_pref == is_booth:
+#     print("booth match")
 
-    # def reservation_assignment(reservation_id):
-    #     if table_seats < reservation.party_num:
-    #         seats = True
+# def reservation_assignment(reservation_id):
+#     if table_seats < reservation.party_num:
+#         seats = True
 
-    #     if is_taken = False:
-    #         not_taken = True
-    #   if res_date == datetime.today()
+#     if is_taken = False:
+#         not_taken = True
+#   if res_date == datetime.today()
 
-    # >>> datetime.now()
-    # datetime.datetime(2020, 11, 24, 23, 54, 52, 15333)
-    # >>> datetime.today()
-    # datetime.datetime(2020, 11, 24, 23, 54, 58, 89993)
+# >>> datetime.now()
+# datetime.datetime(2020, 11, 24, 23, 54, 52, 15333)
+# >>> datetime.today()
+# datetime.datetime(2020, 11, 24, 23, 54, 58, 89993)
 
-    # 'res_date': '2020-11-25',
+# 'res_date': '2020-11-25',
 
-    # >>> date.today()
-    # datetime.date(2020, 11, 25)
+# >>> date.today()
+# datetime.date(2020, 11, 25)
 
-    # assign reservation
-    # min in reservation start - min res end = avg res
+# assign reservation
+# min in reservation start - min res end = avg res
 
-    # expected table stay = 45
+# expected table stay = 45
 
-    # if party_num in range 6+:
-    #     expected table stay +15
+# if party_num in range 6+:
+#     expected table stay +15
 
-    # if celebrating
-    #     expected table stay +20:
+# if celebrating
+#     expected table stay +20:
 
-    # total = end - arrival
-    # dinning_speed =  total - expected
+# total = end - arrival
+# dinning_speed =  total - expected
 
-    # assigning table
-    # if num_seats - res_size > 0:
+# assigning table
+# if num_seats - res_size > 0:
 
-    # if is_taken = False
+# if is_taken = False
 
-    # if arrival_time +delta? expected_min is < new arrival time?
+# if arrival_time +delta? expected_min is < new arrival time?

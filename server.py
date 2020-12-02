@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id, date_match, expected_time
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id, date_match, expected_time, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, check_logic
 from dateutil import parser
 
 from jinja2 import StrictUndefined
@@ -124,6 +124,7 @@ def view_layout_page():
         flash('Table was created')
         #
         # TODO fix flash
+
     return render_template('layout.html')
 
 
@@ -173,11 +174,11 @@ def make_reservation():
     res_date = request.form.get('res_date')
     res_time = request.form.get('res_time')
     res_notes = request.form.get('res_notes')
-    # arrival_time = request.form.get('arrival_time')
-    # end_time = request.form.get('end_time')
+
     booth_pref = request.form.get('booth_pref')
     is_celebrating = request.form.get('is_celebrating')
-
+    # arrival_time = request.form.get('arrival_time')
+    # end_time = request.form.get('end_time')
     print("")
     print("")
     print(f'type res_date before parse{type(res_date)}')
@@ -189,6 +190,8 @@ def make_reservation():
     print(f'type{type(res_time)}')
     print("")
     print("")
+    check = check_logic()
+    print(check)
 
     if is_celebrating == "True":
         is_celebrating = True
@@ -208,12 +211,17 @@ def make_reservation():
 
     print('')
     guest = create_guest(phone_num=phone_num, guest_name=guest_name)
-
+    expected_time(party_num, is_celebrating, guest.avg_time_spent)
     restaurant_id = session['restaurant_id']
 
     reservation = create_res(guest_id=guest.guest_id, restaurant_id=restaurant_id, party_num=party_num,  res_date=res_date, res_time=res_time,
                              res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating)
-
+    res_check = get_pending_reservations_by_restaurant(restaurant_id)
+    print('')
+    print('')
+    print(res_check)
+    print('')
+    print('')
     tables = get_tables_by_restaurant_id(restaurant_id)
     # print('')
     # print("THE TABLES SHOWN ARE:", tables)
