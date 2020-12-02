@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id, date_match, expected_time, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, check_logic
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id, date_match, expected_time, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match
 from dateutil import parser
 
 from jinja2 import StrictUndefined
@@ -190,8 +190,8 @@ def make_reservation():
     print(f'type{type(res_time)}')
     print("")
     print("")
-    check = check_logic()
-    print(check)
+    # check = check_logic()
+    # print(check)
 
     if is_celebrating == "True":
         is_celebrating = True
@@ -202,17 +202,20 @@ def make_reservation():
         booth_pref = True
     else:
         booth_pref = False
+    restaurant_id = session['restaurant_id']
 
     # TODO Start time conditional -html??
     # TODO End time conditional- html??
     # TODO Bookings Full??? Needs to all occur here to prevent false booking
+    tables = get_tables_by_restaurant_id(restaurant_id)
+    table_match_check = table_match(party_num, booth_pref, tables)
+    print(f"table match -------- {table_match_check}")
 
     date_match(res_date)
 
     print('')
     guest = create_guest(phone_num=phone_num, guest_name=guest_name)
     expected_time(party_num, is_celebrating, guest.avg_time_spent)
-    restaurant_id = session['restaurant_id']
 
     reservation = create_res(guest_id=guest.guest_id, restaurant_id=restaurant_id, party_num=party_num,  res_date=res_date, res_time=res_time,
                              res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating)
@@ -222,13 +225,9 @@ def make_reservation():
     print(res_check)
     print('')
     print('')
-    tables = get_tables_by_restaurant_id(restaurant_id)
-    # print('')
-    # print("THE TABLES SHOWN ARE:", tables)
-    # print('')
-    # print('')
 
     # expected_time(party_num, is_celebrating, reservation.avg_time_spent)
+
     return render_template('table_time.html', guest=guest,
                            reservation=reservation, tables=tables)
 

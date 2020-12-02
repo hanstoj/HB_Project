@@ -166,24 +166,36 @@ def get_past_reservations_by_restaurant(restaurant_id):
     return Reservation.query.filter(Reservation.arrival_time != None, Reservation.end_time != None, restaurant_id == restaurant_id).all()
 
 
-def check_logic():
-    party = 4
-    seats = 4
-    booth = True
-    is_booth = True
-    time_expected = 45
-    start_time = datetime.now()
+def table_match(party_num, booth_pref, tables):
+    table_matches = []
+    for table in tables.tables:
+        if int(party_num) <= table.num_seats:
+            seats = True
+        else:
+            seats = False
+        if booth_pref == table.is_booth:
+            booth = True
+        else:
+            booth = False
+        if booth_pref == True and table.is_booth == False:
+            print("no booths currently avalible, continue without booth?")
+        if seats and booth == True:
+            table_matches.append(table)
+    return table_matches
 
-    if party <= seats and booth == is_booth:
-        print(f'first logic passed')
 
-    finish_time = start_time + timedelta(minutes=time_expected)
-    print(f"start time {start_time}")
-    print(f"finish time {finish_time}")
+# def check_logic():
 
-    print(arrow.Arrow.span_range(start_time, finish_time))
+#     time_expected = 45
+#     start_time = datetime.now()
 
-    return print(f"function complete")
+#     finish_time = start_time + timedelta(minutes=time_expected)
+#     print(f"start time {start_time}")
+#     print(f"finish time {finish_time}")
+
+#     for table where match
+
+#     return print(f"function complete")
 # reservation org by t stamps
 # pull time query search  % starts
 # % fr table id set all table res for res at 7 pull those that meet criteria look through table check if reservered
