@@ -31,10 +31,10 @@ def create_restaurant(username, restaurant_name,
     return restaurant
 
 
-def create_table(table_num, is_booth, num_seats, restaurant_id, is_taken=False):
+def create_table(table_num, is_booth, num_seats, restaurant_id):
     """Create Table in Restaurant"""
     table = Dinning_table(table_num=table_num, is_booth=is_booth,
-                          num_seats=num_seats, restaurant_id=restaurant_id, is_taken=is_taken)
+                          num_seats=num_seats, restaurant_id=restaurant_id)
 
     db.session.add(table)
     db.session.commit()
@@ -47,7 +47,7 @@ def get_table_by_table_num(table_num):
     return Dinning_table.query.filter(Dinning_table.table_num == table_num).first()
 
 
-def create_res(guest_id, restaurant_id, party_num, res_date, res_time, expected_time, res_notes, booth_pref, is_celebrating,  end_time=None, arrival_time=None):
+def create_res(guest_id, restaurant_id, party_num, res_date, res_time, expected_time, res_notes, booth_pref, is_celebrating, table_id, end_time=None, arrival_time=None):
     """Create and return a restaurant."""
 
     # print("")
@@ -64,7 +64,7 @@ def create_res(guest_id, restaurant_id, party_num, res_date, res_time, expected_
     print("")
 
     reservation = Reservation(guest_id=guest_id, restaurant_id=restaurant_id, party_num=party_num, res_date=res_date, res_time=res_time, expected_time=expected_time, res_notes=res_notes,
-                              booth_pref=booth_pref, is_celebrating=is_celebrating,  end_time=end_time, arrival_time=arrival_time)
+                              booth_pref=booth_pref, is_celebrating=is_celebrating, table_id=table_id, end_time=end_time, arrival_time=arrival_time)
     db.session.add(reservation)
     db.session.commit()
 
@@ -191,57 +191,150 @@ def get_past_reservations_by_restaurant(restaurant_id):
     return Reservation.query.filter(Reservation.arrival_time != None, Reservation.end_time != None, restaurant_id == restaurant_id).all()
 
 
-def table_match(party_num, booth_pref, tables):
+def table_match(party_num, tables):
+    # booth_pref,
     table_matches = []
     for table in tables.tables:
         if int(party_num) <= table.num_seats:
             seats = True
         else:
             seats = False
-        if booth_pref == table.is_booth:
-            booth = True
-        else:
-            booth = False
-        if booth_pref == True and table.is_booth == False:
             print("no booths currently avalible, continue without booth?")
-        if seats and booth == True:
-            table_matches.append(table)
-    return table_matches
+        if seats == True:
+            table_matches.append(table.table_id)
+    return table_matches  # Return list of table ids that it matches with
+
+# NOTE: Goal:  get table id for each reservation and times of assigned reservations with that table
 
 
-# def check_logic():
+def open_time_slot(restaurant_id, qualified_tables):
 
-#     time_expected = 45
-#     start_time = datetime.now()
+    print("IF YOU MADE IT HERE")
 
-#     finish_time = start_time + timedelta(minutes=time_expected)
-#     print(f"start time {start_time}")
-#     print(f"finish time {finish_time}")
+#     # table_ids = db.session.query(Dinning_table).filter_by(
+#     #     restaurant_id=restaurant_id)
 
-#     for table where match
+#     # #table_ids_all_lst = Dinning_table.query.all()
+#     # print("IF THIS IS A LIST OF OBJECT FROM DINNING TABLE", table_ids)
+#     # print("")
+#     # print("")
+#     # print("")
+#     # print("")
+#     # print("")
 
-#     return print(f"function complete")
-# reservation org by t stamps
-# pull time query search  % starts
-# % fr table id set all table res for res at 7 pull those that meet criteria look through table check if reservered
-# lean into accessibility contrast these presentages
-# accessibility fonts
-# 2 type faces
-# font pairing websites
-# photo rabbit hole
-# routes that have it if not session cookie ad boot to log in
-#  middle wear
-#  pick something found to be the meatiest or an issue
-#  spend a few minute on intro
-#  highlight what is different what makes uou different prior watress go into intresting bit you liked or enhoyed
-#  more unique what and how  make connection to form uniqunes what is importaint for reservations core
-#  index pull data  take notes of aha moments.
-#  read me for everythong
+#     test = Reservation.query.filter(
+#         Reservation.arrival_time == None, restaurant_id == restaurant_id).options(db.joinedload("table")).all()
+
+    test2 = Reservation.query.filter(
+        Reservation.arrival_time == None, restaurant_id == restaurant_id)
+    print(qualified_tables)
+    print("qualified")
+    print("qualified")
+    print("qualified")
+    print(qualified_tables)
+
+    print("test2 checking")
+
+    for t in test2:
+        print(t.res_time)
+        print(t.table_id)
+
+        if t.table_id in qualified_tables:
+            print(f"YEAHHHH {t.res_time} until {t.expected_time}")
+
+    # test2 = Dinning_table.query.filter_by(restaurant_id = restaurant_id, table_num = )
+
+    # test_table_id = DiningTable.query.filter_by(resturant_id==desired_resturant, table_num==desired_table).first()
+
+    # res_list = Reservation.query.filter_by(Reservation.arrival_time == None, table_id == test_table_id).all()
+
+    # res_check = Reservation.query.filter(
+    # Reservation.table_id == Dinning_table.table_id)
+
+    # .join(DinningTable)
+
+    # NOTE: From SQL ALchemy 2 Lecture Notes
+    #emps = db.session.query(Emplyee, Department).join(Department).all()
+
+    # you can do this
+# if product.favorite[0].user_id == user_id:
 
 
-# def get_
+# if you make a relationship like this
 
-# def seating_order():
+# favorite = db.relationship("Favorite")
+# product = product.query.filter(aldkfjlakdjf)
+# product.favorite
+
+    # products = db.session.query(Product).select_from(Product).join(Favorite, Favorite.product_id == Product.product_id).filter(Favorite.user_id == user_id).all()
+
+    # print(f"THIS IS RES_CHECK {res_check}")  # Identify the tables
+
+    # table_match(party_num, booth_pref, tables):
+
+    # find table id = 1 assocatied with each resrvation id = 1
+    # check start_times reservations associated with that table
+    # check finish_times reservations associated with that table
+    # print()
+#     # [<Reservation res_id=1 table_id = None party_num=4 expected_time = 2020-12-03 14:35:00 res_time=2020-12-03 13:50:00 arriv
+#     print("THIS IS TEST VARIABLE:", test)
+# # al_time=None end_time=Nonebooth_pref=False res_notes=  celebrating=False >
+
+#     for i in test:
+#         print("WHAT IS THIS:", i.res_id)
+
+#     # for i in test.table:
+#     #     print("IS THIS THE TABLE ID?", i.table_id)
+
+#     # check = db.session.query(Reservation.table_id,
+#     #                          Dinning_table.reservation_id,
+#     #                          Reservation.res_time, Reservation.expected_time).join(Reservation).all()
+#     # q.group_by('state').all()
+#     # q.group_by('state').having(db.func.count(Employee.employee_id) > 2).all()
+#     print("If the Above executes..")
+#     # for table_id, reservation_id, res_time, expected_time in check:
+
+#     #     return print(table_id, reservation_id, res_time, expected_time)
+
+#     # tables = Dinning_table.query.options(db.joinedload('reservation')).all()
+#     # print(tables)
+
+#     #     for table in tables:    # [<Emp>, <Emp>]
+#     #         if emp.dept is not None:
+#     #             print(emp.name, emp.dept.dept_code, emp.dept.phone)
+#     #         else:
+#     #             print(emp.name, "-", "-")
+#     #     for table in qualified_tables:
+#     #         print(table)
+#     #         print(table.res_time)
+#     #         print(table.expected_time)
+
+#     # if table.res_time > expected_time:
+#     #     print("")
+#     #     print(f"table.res {table.res}")
+#     #     print ("is greater than")
+#     #     print(f"table.res {expected_time}")
+#     # if table.expected_time > res_time:
+#     #     print("")
+#     #     print
+#     #
+
+#     # pass
+# # def check_logic():
+
+# #     time_expected = 45
+# #     start_time = datetime.now()
+
+# #     finish_time = start_time + timedelta(minutes=time_expected)
+# #     print(f"start time {start_time}")
+# #     print(f"finish time {finish_time}")
+
+# #     for table where match
+
+
+# # def get_
+
+# # def seating_order():
 
 # slack_time = ( res_time - seated_time - e' )
 # if table open from arrivaltime to expected end seat table

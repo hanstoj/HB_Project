@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id, date_match, expected_time_calc, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match, get_reservations_by_restaurant
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id, date_match, expected_time_calc, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match, get_reservations_by_restaurant, open_time_slot
 from dateutil import parser
 from arrow import arrow
 from datetime import datetime, timedelta
@@ -179,22 +179,12 @@ def make_reservation():
 
     booth_pref = request.form.get('booth_pref')
     is_celebrating = request.form.get('is_celebrating')
+
     restaurant_id = session['restaurant_id']
-    # arrival_time = request.form.get('arrival_time')
-    # end_time = request.form.get('end_time')
-    print("")
-    print("")
-    print(f'type res_date before parse{type(res_date)}')
+
     res_date = parser.parse(res_date)
     res_time = parser.parse(res_time)
-    print(f'check parsing method res_date {res_date}')
-    print(f'type{type(res_date)}')
-    print(f'check parsing method res_time {res_time}')
-    print(f'type{type(res_time)}')
-    print("")
-    print("")
-    # check = check_logic()
-    # print(check)
+    # changing to datetime
 
     if is_celebrating == "True":
         is_celebrating = True
@@ -209,31 +199,27 @@ def make_reservation():
     # TODO Start time conditional -html??
     # TODO End time conditional- html??
     # TODO Bookings Full??? Needs to all occur here to prevent false booking
-    tables = get_tables_by_restaurant_id(restaurant_id)
 
-    qualified_tables = table_match(party_num, booth_pref, tables)
-    print('')
-    print('')
-    print('')
+    tables = get_tables_by_restaurant_id(restaurant_id)
+    # gets tables in the restaurant
+
+    qualified_tables = table_match(party_num, tables)
+    # checks which tables match requirements- retuns list of table objects
+    # TODO sort by seats
     print(f"table match -------- {qualified_tables}")
 
-    # table_time_check(start_time, expected_time, qualified_tables)
+    # TODO table_time_check(start_time, expected_time, qualified_tables)
 
-    get_reservations_by_restaurant(restaurant_id)
-    print("This was the one you wanted ")
-    print("")
-    print("")
-    print("")
-    date_match(res_date)
+    # get_reservations_by_restaurant(restaurant_id)
+
     res_check = get_pending_reservations_by_restaurant(restaurant_id)
     print('')
+    print(f"reservations waiting {res_check}")
     guest = create_guest(phone_num=phone_num, guest_name=guest_name)
 
     expected = expected_time_calc(
         party_num, is_celebrating, guest.avg_time_spent)
-    # initial_time = arrow.get(res_date)
-    # print("initial_time")
-    # print(initial_time)
+
     print("res_time")
     print(res_time)
     expected_time = res_time + timedelta(minutes=expected)
@@ -241,8 +227,22 @@ def make_reservation():
     print("expected_time")
     print("expected_time")
 
+    # check = db.session.query(Dinning_table.table_id,
+    #                          Dinning_table.reservation_id,
+    #                          Reservation.res_time, Reservation.expected_time).join(Reservation).all()
+
+    open_time_slot(restaurant_id, qualified_tables)
+
+    # print("FROM OPEN TIME SLOT FUNCTIONL", getting_ids)
+
+    # get table id for each reservation and times of past reservations with that table
+
+    # TODO compare other reservations with timeslots by table.
+    # print(table.res_time)
+    # print(table.expected_time)
+
     reservation = create_res(guest_id=guest.guest_id, restaurant_id=restaurant_id, party_num=party_num,  res_date=res_date, res_time=res_time, expected_time=expected_time,
-                             res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating)
+                             res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating, table_id=4)
 
     print('')
     print('')

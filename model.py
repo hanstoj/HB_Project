@@ -35,18 +35,18 @@ class Dinning_table(db.Model):
     num_seats = db.Column(db.Integer)
     restaurant_id = db.Column(
         db.Integer, db.ForeignKey('restaurants.restaurant_id'))
-    is_taken = db.Column(db.Boolean)
 
-    reservation_id = db.Column(
-        db.Integer, db.ForeignKey('reservations.res_id'))
+    # reservation_id = db.Column(
+    #     db.Integer, db.ForeignKey('reservations.res_id'))
 
     restaurants = db.relationship("Restaurant", backref="tables")
+    reservation = db.relationship("Reservation")
 
     # restaurant = db.relationship('Restaurant')
     # reservation = db.relationship('Reservation')
 
     def __repr__(self):
-        return f'<Dinning_table table_id={self.table_id} table_num={self.table_num} booth={self.is_booth} num_seats={self.num_seats}table_status={self.is_taken} restaurant_id={self.restaurant_id}>'
+        return f'<Dinning_table table_id={self.table_id} table_num={self.table_num} booth={self.is_booth} num_seats={self.num_seats} restaurant_id={self.restaurant_id}>'
 
 
 class Reservation(db.Model):
@@ -67,8 +67,8 @@ class Reservation(db.Model):
     booth_pref = db.Column(db.Boolean)
     res_notes = db.Column(db.Text)
     is_celebrating = db.Column(db.Boolean)
+    table_id = db.Column(db.Integer, db.ForeignKey('tables.table_id'))
 
-    # table_id = db.Column(db.Integer, db.ForeignKey('tables.table_id'))
     # phone_num = db.Column(db.String, db.ForeignKey('guests.phone_num'))
     restaurant = db.relationship('Restaurant', backref="reservations")
     guest = db.relationship('Guest')
@@ -76,7 +76,7 @@ class Reservation(db.Model):
     # guest_stats = db.relationship('Guest_stat')
 
     def __repr__(self):
-        return f'<Reservation res_id={self.res_id} party_num={self.party_num} res_time={self.res_time} arrival_time={self.arrival_time} end_time={self.end_time}booth_pref={self.booth_pref} res_notes={self.res_notes}  celebrating={self.is_celebrating} >'
+        return f'<Reservation res_id={self.res_id} table_id = {self.table_id} party_num={self.party_num} expected_time = {self.expected_time} res_time={self.res_time} arrival_time={self.arrival_time} end_time={self.end_time}booth_pref={self.booth_pref} res_notes={self.res_notes}  celebrating={self.is_celebrating} >'
 
 
 class Guest(db.Model):
