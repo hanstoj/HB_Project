@@ -1,8 +1,10 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id, date_match, expected_time, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id, date_match, expected_time_calc, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match, get_reservations_by_restaurant
 from dateutil import parser
+from arrow import arrow
+from datetime import datetime, timedelta
 
 from jinja2 import StrictUndefined
 
@@ -177,6 +179,7 @@ def make_reservation():
 
     booth_pref = request.form.get('booth_pref')
     is_celebrating = request.form.get('is_celebrating')
+    restaurant_id = session['restaurant_id']
     # arrival_time = request.form.get('arrival_time')
     # end_time = request.form.get('end_time')
     print("")
@@ -202,31 +205,50 @@ def make_reservation():
         booth_pref = True
     else:
         booth_pref = False
-    restaurant_id = session['restaurant_id']
 
     # TODO Start time conditional -html??
     # TODO End time conditional- html??
     # TODO Bookings Full??? Needs to all occur here to prevent false booking
     tables = get_tables_by_restaurant_id(restaurant_id)
-    table_match_check = table_match(party_num, booth_pref, tables)
-    print(f"table match -------- {table_match_check}")
 
+    qualified_tables = table_match(party_num, booth_pref, tables)
+    print('')
+    print('')
+    print('')
+    print(f"table match -------- {qualified_tables}")
+
+    # table_time_check(start_time, expected_time, qualified_tables)
+
+    get_reservations_by_restaurant(restaurant_id)
+    print("This was the one you wanted ")
+    print("")
+    print("")
+    print("")
     date_match(res_date)
-
+    res_check = get_pending_reservations_by_restaurant(restaurant_id)
     print('')
     guest = create_guest(phone_num=phone_num, guest_name=guest_name)
-    expected_time(party_num, is_celebrating, guest.avg_time_spent)
 
-    reservation = create_res(guest_id=guest.guest_id, restaurant_id=restaurant_id, party_num=party_num,  res_date=res_date, res_time=res_time,
+    expected = expected_time_calc(
+        party_num, is_celebrating, guest.avg_time_spent)
+    # initial_time = arrow.get(res_date)
+    # print("initial_time")
+    # print(initial_time)
+    print("res_time")
+    print(res_time)
+    expected_time = res_time + timedelta(minutes=expected)
+    print(expected_time)
+    print("expected_time")
+    print("expected_time")
+
+    reservation = create_res(guest_id=guest.guest_id, restaurant_id=restaurant_id, party_num=party_num,  res_date=res_date, res_time=res_time, expected_time=expected_time,
                              res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating)
-    res_check = get_pending_reservations_by_restaurant(restaurant_id)
+
     print('')
     print('')
     print(res_check)
     print('')
     print('')
-
-    # expected_time(party_num, is_celebrating, reservation.avg_time_spent)
 
     return render_template('table_time.html', guest=guest,
                            reservation=reservation, tables=tables)

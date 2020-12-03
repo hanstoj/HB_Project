@@ -47,7 +47,7 @@ def get_table_by_table_num(table_num):
     return Dinning_table.query.filter(Dinning_table.table_num == table_num).first()
 
 
-def create_res(guest_id, restaurant_id, party_num, res_date, res_time, res_notes, booth_pref, is_celebrating,  end_time=None, arrival_time=None):
+def create_res(guest_id, restaurant_id, party_num, res_date, res_time, expected_time, res_notes, booth_pref, is_celebrating,  end_time=None, arrival_time=None):
     """Create and return a restaurant."""
 
     # print("")
@@ -63,7 +63,7 @@ def create_res(guest_id, restaurant_id, party_num, res_date, res_time, res_notes
     # print("")
     print("")
 
-    reservation = Reservation(guest_id=guest_id, restaurant_id=restaurant_id, party_num=party_num, res_date=res_date, res_time=res_time, res_notes=res_notes,
+    reservation = Reservation(guest_id=guest_id, restaurant_id=restaurant_id, party_num=party_num, res_date=res_date, res_time=res_time, expected_time=expected_time, res_notes=res_notes,
                               booth_pref=booth_pref, is_celebrating=is_celebrating,  end_time=end_time, arrival_time=arrival_time)
     db.session.add(reservation)
     db.session.commit()
@@ -132,7 +132,7 @@ def get_guest_by_phone_num(phone_num):
     return Guest.query.get(phone_num)
 
 
-def expected_time(party_num, is_celebrating, avg_time_spent):
+def expected_time_calc(party_num, is_celebrating, avg_time_spent):
 
     print(f"{party_num}, {is_celebrating}, {avg_time_spent}")
 
@@ -145,7 +145,32 @@ def expected_time(party_num, is_celebrating, avg_time_spent):
         expected = expected + 20
         print(f"is celebraing update: {expected}")
 
-    return print(f"minutes of time: {expected}")
+    return expected
+
+
+def get_reservations_by_restaurant(restaurant_id):
+
+    return db.session.query(Reservation).filter_by(restaurant_id=restaurant_id)
+
+
+# i need reservations sorted by restaurant where res_date == res_date:
+
+
+# def table_check(start_time, expected_time, qualified_tables)
+    # if end_time < res.expected_time
+    # # get reservations by date
+    # for reservations
+
+    # for table in tables:
+    #     if
+    #     if table.reservation.None
+
+    # for reservations if reservation.start within expected time do not book
+    # for reservations if res_start + resexpected
+
+#     for reservation id in tables matched
+#     if arrivaltime after previous estimated_time  and previous end time after
+#         add reservation to the table
 
 
 # def save_expected_time(party_num,is_celebrating, avg_time_spent, guest_id, end_time):

@@ -9,12 +9,15 @@
                   {%if table.num_seats == 4%}
                         <img class="tabletop" src="/static/4_top.png" alt="[]">
                         <p> table number:{{ table.table_num }} </p>
+                        <button class=sit_button>Seated</button>
                   {%elif table.num_seats == 2%}
                         <img class= "tabletop" src="/static/2_top.png" alt= "x[]x">
                         <p> table number:{{ table.table_num }} </p>
+                        <button class=sit_button>Seated</button>
                   {%else%}
                         <img class="tabletop" src="/static/4_top.png" alt="[]">
                         <p> table number:{{ table.table_num }} </p>
+                        <button class=sit_button>Seated</button>
                   {%endif%}
             {% endfor %}
 </div>
