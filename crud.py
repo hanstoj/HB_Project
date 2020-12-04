@@ -207,25 +207,12 @@ def table_match(party_num, tables):
 # NOTE: Goal:  get table id for each reservation and times of assigned reservations with that table
 
 
-def open_time_slot(restaurant_id, qualified_tables):
+def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
 
     print("IF YOU MADE IT HERE")
 
-#     # table_ids = db.session.query(Dinning_table).filter_by(
-#     #     restaurant_id=restaurant_id)
-
-#     # #table_ids_all_lst = Dinning_table.query.all()
-#     # print("IF THIS IS A LIST OF OBJECT FROM DINNING TABLE", table_ids)
-#     # print("")
-#     # print("")
-#     # print("")
-#     # print("")
-#     # print("")
-
-#     test = Reservation.query.filter(
-#         Reservation.arrival_time == None, restaurant_id == restaurant_id).options(db.joinedload("table")).all()
-
-    test2 = Reservation.query.filter(
+#
+    unseated = Reservation.query.filter(
         Reservation.arrival_time == None, restaurant_id == restaurant_id)
     print(qualified_tables)
     print("qualified")
@@ -235,12 +222,79 @@ def open_time_slot(restaurant_id, qualified_tables):
 
     print("test2 checking")
 
-    for t in test2:
+    for t in unseated:
         print(t.res_time)
         print(t.table_id)
+        smallest_slack = timedelta(days=40)
+        for t.table_id in qualified_tables:
 
-        if t.table_id in qualified_tables:
-            print(f"YEAHHHH {t.res_time} until {t.expected_time}")
+            if res_time >= t.res_time and res_time >= t.expected_time:
+                # print(
+                #     f"res time of {res_time} is after the previously assigned {t.res_time} ")
+                # print(
+                #     f"expected time of {expected_time} is after the previously assigned {t.expected_time} ")
+                seatable = True
+                res_slack = expected_time - t.res_time
+                print(seatable)
+                print(res_slack)
+                print(f"smallest_slack {smallest_slack}")
+
+                if res_slack < smallest_slack:
+                    smallest_slack = res_slack
+                    table_selected = t.table_id
+                    print(smallest_slack)
+
+            if res_time <= t.res_time and expected_time <= t.expected_time:
+                # print(
+                #     f"res time of {res_time}  is less than the previously assigned {t.res_time}")
+                # print(
+                #     f"expected time of {expected_time} is less than the previously assigned expected time of {t.expected_time}")
+                seatable = True
+                res_slack = t.expected_time - res_time
+                print(seatable)
+                print(f"smallest_slack {smallest_slack}")
+
+                if res_slack < smallest_slack:
+                    smallest_slack = res_slack
+                    table_selected = t.table_id
+                    print(smallest_slack, t.table_id)
+                    print
+
+    print(smallest_slack, table_selected)
+    return table_selected
+
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # else conditions for testing
+
+    # if res_time >= t.res_time and res_time <= t.expected_time:
+    #         print(
+    #             f"res time of {res_time} is after previously booked res_time {t.res_time}")
+    #         print(
+    #             f"res time of {res_time} is before previously booked estimated_time end time {t.expected_time}")
+    #         seatable = False
+    #         print(seatable)
+    #     if res_time <= t.res_time and expected_time >= t.expected_time:
+    #         print(
+    #             f"res time of {res_time} is before previously booked res_time  {t.res_time}")
+    #         print(
+    #             f" and expected time of {expected_time} is after the reservation time {res_time}")
+
+    #         seatable = False
+    #         print(seatable)
+
+    # if res_time >= t.res_time and res_time >= t.expected_time:
+    #     print(
+    #         f"res time of {res_time} is after the previously assigned {t.res_time}")
+    #     print(
+    #         f" res time of {res_time} is after expected end of expected time{t.expected_time}")
+
+    #     print("Yeah huh")
+    # elif res_time <= t.res_time:
+    #     print(
+    #         f"This res time of {res_time} is before previously booked {t.res_time}")
+    #     print("Yeah huh")
+    # else:
+    #     print("Nu uh")
 
     # test2 = Dinning_table.query.filter_by(restaurant_id = restaurant_id, table_num = )
 
@@ -254,7 +308,7 @@ def open_time_slot(restaurant_id, qualified_tables):
     # .join(DinningTable)
 
     # NOTE: From SQL ALchemy 2 Lecture Notes
-    #emps = db.session.query(Emplyee, Department).join(Department).all()
+    # emps = db.session.query(Emplyee, Department).join(Department).all()
 
     # you can do this
 # if product.favorite[0].user_id == user_id:

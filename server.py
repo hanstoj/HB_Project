@@ -77,26 +77,13 @@ def create_acct():
 
     session['restaurant_id'] = this_restaurant.restaurant_id
 
-    # restaurant = get_restaurant_by_restaurant_id(session['restaurant_id'])
-
-    # restaurant = get_restaurant_by_username(username)
-    # if restaurant:
-    #     flash('Cannot create an account with that email. Try again.')
-    #     # return redirect('/layout')
-    # else:
-
-    # render_temp late('layout.html')
-    # pass in rest id as variable
     return redirect('/layout/')
     #
 
 
-# <restaurant_id>
 @app.route('/layout/')
 def display_layout_page():
     """Display layout Creation Page"""
-
-    # restaurant_id = session['restaurant_id']
 
     return render_template("layout.html")
 
@@ -108,9 +95,6 @@ def view_layout_page():
     is_booth = request.form.get('is_booth')
     num_seats = request.form.get('num_seats')
     restaurant_id = session['restaurant_id']
-
-    # options: grab from cookie
-    # add invisible form
 
     if is_booth == "True":
         is_booth = True
@@ -146,18 +130,6 @@ def TableTime():
 
     return render_template('table_time.html', tables=tables)
 
-
-# options: add cookie  - later in exp access
-# pull out id  -
-# add id as cookie
-# in addition /<restid> - if layout structured this way only accepts get or post
-# -flask cant read cookies
-
-
-# if redirect- layout -> restaurant id take with it
-
-# @app.route('/<user_id>/profile')
-# def show_profile(user_id):
 
 @app.route('/make_res')
 def display_res_page():
@@ -205,12 +177,7 @@ def make_reservation():
 
     qualified_tables = table_match(party_num, tables)
     # checks which tables match requirements- retuns list of table objects
-    # TODO sort by seats
-    print(f"table match -------- {qualified_tables}")
-
-    # TODO table_time_check(start_time, expected_time, qualified_tables)
-
-    # get_reservations_by_restaurant(restaurant_id)
+    # TODO reenter booth logic after testing
 
     res_check = get_pending_reservations_by_restaurant(restaurant_id)
     print('')
@@ -219,36 +186,18 @@ def make_reservation():
 
     expected = expected_time_calc(
         party_num, is_celebrating, guest.avg_time_spent)
+    # calculates expected minutes a guest may stay
 
-    print("res_time")
-    print(res_time)
     expected_time = res_time + timedelta(minutes=expected)
-    print(expected_time)
-    print("expected_time")
-    print("expected_time")
+    # converts to relevant format
 
-    # check = db.session.query(Dinning_table.table_id,
-    #                          Dinning_table.reservation_id,
-    #                          Reservation.res_time, Reservation.expected_time).join(Reservation).all()
-
-    open_time_slot(restaurant_id, qualified_tables)
-
-    # print("FROM OPEN TIME SLOT FUNCTIONL", getting_ids)
-
-    # get table id for each reservation and times of past reservations with that table
-
-    # TODO compare other reservations with timeslots by table.
-    # print(table.res_time)
-    # print(table.expected_time)
+    table_id = open_time_slot(
+        restaurant_id, qualified_tables, res_time, expected_time)
+    # checks booked times for reservations not yet seated that fit the table requirements
 
     reservation = create_res(guest_id=guest.guest_id, restaurant_id=restaurant_id, party_num=party_num,  res_date=res_date, res_time=res_time, expected_time=expected_time,
-                             res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating, table_id=4)
-
-    print('')
-    print('')
-    print(res_check)
-    print('')
-    print('')
+                             res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating, table_id=table_id)
+    # creates reservation
 
     return render_template('table_time.html', guest=guest,
                            reservation=reservation, tables=tables)
