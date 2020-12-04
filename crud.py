@@ -210,8 +210,6 @@ def table_match(party_num, tables):
 def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
 
     print("IF YOU MADE IT HERE")
-
-#
     unseated = Reservation.query.filter(
         Reservation.arrival_time == None, restaurant_id == restaurant_id)
     print(qualified_tables)
@@ -225,7 +223,7 @@ def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
     for t in unseated:
         print(t.res_time)
         print(t.table_id)
-        smallest_slack = timedelta(days=40)
+        smallest_diff = timedelta(days=40)
         for t.table_id in qualified_tables:
 
             if res_time >= t.res_time and res_time >= t.expected_time:
@@ -234,13 +232,13 @@ def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
                 # print(
                 #     f"expected time of {expected_time} is after the previously assigned {t.expected_time} ")
                 seatable = True
-                res_slack = expected_time - t.res_time
+                res_diff = expected_time - t.res_time
                 print(seatable)
-                print(res_slack)
-                print(f"smallest_slack {smallest_slack}")
+                print(res_diff)
+                print(f"smallest_diff {smallest_diff}")
 
-                if res_slack < smallest_slack:
-                    smallest_slack = res_slack
+                if res_diff < smallest_diff:
+                    smallest_diff = res_diff
                     table_selected = t.table_id
                     print(smallest_slack)
 
@@ -250,17 +248,17 @@ def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
                 # print(
                 #     f"expected time of {expected_time} is less than the previously assigned expected time of {t.expected_time}")
                 seatable = True
-                res_slack = t.expected_time - res_time
+                res_diff = t.expected_time - res_time
                 print(seatable)
-                print(f"smallest_slack {smallest_slack}")
+                print(f"smallest_diff {smallest_diff}")
 
-                if res_slack < smallest_slack:
-                    smallest_slack = res_slack
+                if res_diff < smallest_diff:
+                    smallest_diff = res_diff
                     table_selected = t.table_id
-                    print(smallest_slack, t.table_id)
+                    print(smallest_diff, t.table_id)
                     print
 
-    print(smallest_slack, table_selected)
+    print(smallest_diff, table_selected)
     return table_selected
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
