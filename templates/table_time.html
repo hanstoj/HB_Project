@@ -7,17 +7,27 @@
     <h1>Dinning Room</h1>
             {% for table in tables.tables %}
                   {%if table.num_seats == 4%}
+                        <div>
                         <img class="tabletop" src="/static/4_top.png" alt="[]">
                         <p> table number:{{ table.table_num }} </p>
-                        <button class=sit_button>Seated</button>
+
+                        <br>
+                        </div>
                   {%elif table.num_seats == 2%}
+                        <div>
                         <img class= "tabletop" src="/static/2_top.png" alt= "x[]x">
                         <p> table number:{{ table.table_num }} </p>
                         <button class=sit_button>Seated</button>
+
+                        </div>
+
                   {%else%}
+                        <div>
                         <img class="tabletop" src="/static/4_top.png" alt="[]">
                         <p> table number:{{ table.table_num }} </p>
                         <button class=sit_button>Seated</button>
+                        </div>
+
                   {%endif%}
             {% endfor %}
 </div>

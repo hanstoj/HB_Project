@@ -50,19 +50,6 @@ def get_table_by_table_num(table_num):
 def create_res(guest_id, restaurant_id, party_num, res_date, res_time, expected_time, res_notes, booth_pref, is_celebrating, table_id, end_time=None, arrival_time=None):
     """Create and return a restaurant."""
 
-    # print("")
-    # print("")
-    # print(f'type res_date before parse{type(res_date)}')
-    # res_date = parser.parse(res_date)
-    # res_time = parser.parse(res_time)
-    # print(f'check parsing method res_date {res_date}')
-    # print(f'type{type(res_date)}')
-    # print(f'check parsing method res_time {res_time}')
-    # print(f'type{type(res_time)}')
-    # print("")
-    # print("")
-    print("")
-
     reservation = Reservation(guest_id=guest_id, restaurant_id=restaurant_id, party_num=party_num, res_date=res_date, res_time=res_time, expected_time=expected_time, res_notes=res_notes,
                               booth_pref=booth_pref, is_celebrating=is_celebrating, table_id=table_id, end_time=end_time, arrival_time=arrival_time)
     db.session.add(reservation)
@@ -178,17 +165,17 @@ def get_reservations_by_restaurant(restaurant_id):
 
 def get_pending_reservations_by_restaurant(restaurant_id):
 
-    return Reservation.query.filter(Reservation.arrival_time == None, restaurant_id == restaurant_id).all()
+    return Reservation.query.filter(Reservation.arrival_time == None, Reservation.restaurant_id == restaurant_id).all()
 
 
 def get_current_reservations_by_restaurant(restaurant_id):
 
-    return Reservation.query.filter(Reservation.arrival_time != None, Reservation.end_time == None, restaurant_id == restaurant_id).all()
+    return Reservation.query.filter(Reservation.arrival_time != None, Reservation.end_time == None, Reservation.restaurant_id == restaurant_id).all()
 
 
 def get_past_reservations_by_restaurant(restaurant_id):
 
-    return Reservation.query.filter(Reservation.arrival_time != None, Reservation.end_time != None, restaurant_id == restaurant_id).all()
+    return Reservation.query.filter(Reservation.arrival_time != None, Reservation.end_time != None, Reservation.restaurant_id == restaurant_id).all()
 
 
 def table_match(party_num, tables):
@@ -211,7 +198,7 @@ def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
 
     print("IF YOU MADE IT HERE")
     unseated = Reservation.query.filter(
-        Reservation.arrival_time == None, restaurant_id == restaurant_id)
+        Reservation.arrival_time == None, Reservation.restaurant_id == restaurant_id)
     print(qualified_tables)
     print("qualified")
     print("qualified")
@@ -240,7 +227,7 @@ def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
                 if res_diff < smallest_diff:
                     smallest_diff = res_diff
                     table_selected = t.table_id
-                    print(smallest_slack)
+                    print(smallest_diff)
 
             if res_time <= t.res_time and expected_time <= t.expected_time:
                 # print(
@@ -261,6 +248,31 @@ def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
     print(smallest_diff, table_selected)
     return table_selected
 
+
+def get_unseated_by_restaurant(restaurant_id):
+
+    four_hour_before = datetime.now() - timedelta(hours=4)
+    hour_after = datetime.now() + timedelta(hours=1)
+    print(four_hour_before)
+    print(' four_hour_before')
+
+    print('after')
+    print(hour_after)
+    print(type(hour_after))
+
+    unseated_upcoming = Reservation.query.filter(Reservation.arrival_time == None, Reservation.restaurant_id == restaurant_id,
+                                                 Reservation.res_time < hour_after, Reservation.res_time > four_hour_before).order_by(Restaurant.res_time.desc()).all()
+
+    print(
+        f"here is the first option original____________________________________________________\n\n\n\n {unseated_upcoming}")
+
+
+# .order_by(
+#         Reservation.res_time.desc()).limit(10).all()
+    return unseated_upcoming
+
+#     for table_id, dept_name, phone in table_reservations:      # [(n, d, p), (n, d, p)]
+#         print(name, dept_name, phone)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # else conditions for testing
 

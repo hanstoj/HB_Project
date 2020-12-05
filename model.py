@@ -76,7 +76,7 @@ class Reservation(db.Model):
     # guest_stats = db.relationship('Guest_stat')
 
     def __repr__(self):
-        return f'<Reservation res_id={self.res_id} table_id = {self.table_id} party_num={self.party_num} expected_time = {self.expected_time} res_time={self.res_time} arrival_time={self.arrival_time} end_time={self.end_time}booth_pref={self.booth_pref} res_notes={self.res_notes}  celebrating={self.is_celebrating} >'
+        return f'<Reservation res_id={self.res_id} restaurant_id= {self.restaurant_id} table_id = {self.table_id} party_num={self.party_num} expected_time = {self.expected_time} res_time={self.res_time} arrival_time={self.arrival_time} end_time={self.end_time}booth_pref={self.booth_pref} res_notes={self.res_notes}  celebrating={self.is_celebrating} >'
 
 
 class Guest(db.Model):
