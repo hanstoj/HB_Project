@@ -199,59 +199,147 @@ def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
     print("IF YOU MADE IT HERE")
     unseated = Reservation.query.filter(
         Reservation.arrival_time == None, Reservation.restaurant_id == restaurant_id)
+
     print(qualified_tables)
     print("qualified")
     print("qualified")
     print("qualified")
-    print(qualified_tables)
 
-    print("test2 checking")
-
+    print("starting the loop")
     for t in unseated:
         print(t.res_time)
         print(t.table_id)
-        smallest_diff = timedelta(days=40)
+        unseatable_tables = []
+        print(unseatable_tables)
+
         for t.table_id in qualified_tables:
+            if t.res_time <= res_time and t.expected_time <= expected_time:
+                print(
+                    f"first res {t.res_time} is less than new res {res_time} ")
+                print(
+                    f" first exp time {t.expected_time} is before new expected {expected_time}")
+                print(f"{t.table_id} maps as :")
+                print(
+                    f"-----------")
+                print(
+                    f"     ------------")
+                qualified_tables.remove(t.table_id)
+                print(qualified_tables)
 
-            if res_time >= t.res_time and res_time >= t.expected_time:
-                # print(
-                #     f"res time of {res_time} is after the previously assigned {t.res_time} ")
-                # print(
-                #     f"expected time of {expected_time} is after the previously assigned {t.expected_time} ")
-                seatable = True
+            if res_time <= t.res_time and expected_time <= t.expected_time:
+                print(f"{t.table_id} maps as :")
+                print(
+                    f"first NEW {res_time} is before the OLD res {t.res_time} ")
+                print(
+                    f" first NEW exp time {expected_time} is before new expected {t.expected_time}")
+                print(
+                    f"          ----------------")
+                print(
+                    f" ----------------")
+                qualified_tables.remove(t.table_id)
+                print(qualified_tables)
+
+            if t.res_time <= res_time and expected_time <= t.expected_time:
+                print(f"{t.table_id} maps as :")
+                print(
+                    f"first OLD {t.res_time} is before the NEW res {res_time} ")
+                print(
+                    f" first NEW exp time {expected_time} is before new expected {t.expected_time}")
+                print(
+                    f"---------------------------")
+                print(
+                    f"      ------      ")
+                qualified_tables.remove(t.table_id)
+                print(qualified_tables)
+
+            if res_time <= t.res_time and t.expected_time <= expected_time:
+                print(f"{t.table_id} maps as :")
+                print(
+                    f"first NEW {res_time} is before the OLD res {t.res_time} ")
+                print(
+                    f" first OLD exp time {expected_time} is before NEW expected {t.expected_time}")
+                print(
+                    f"   -----    ")
+                print(
+                    f"-----------------")
+                qualified_tables.remove(t.table_id)
+                print(qualified_tables)
+            print("these are still qualified")
+            return qualified_tables
+
+
+def assign_table(qualified_time_table, restaurant_id, res_time, expected_time):
+
+    unseated = Reservation.query.filter(
+        Reservation.arrival_time == None, Reservation.restaurant_id == restaurant_id)
+
+    for t in unseated:
+        print(t)
+        smallest_diff = timedelta(2020, 4, 12, 0, 0, 0)
+        for t.table_id in qualified_time_table:
+            if t.res_time <= res_time and res_time >= t.expected_time:
                 res_diff = expected_time - t.res_time
-                print(seatable)
-                print(res_diff)
                 print(f"smallest_diff {smallest_diff}")
-
                 if res_diff < smallest_diff:
                     smallest_diff = res_diff
                     table_selected = t.table_id
                     print(smallest_diff)
 
-            if res_time <= t.res_time and expected_time <= t.expected_time:
-                # print(
-                #     f"res time of {res_time}  is less than the previously assigned {t.res_time}")
-                # print(
-                #     f"expected time of {expected_time} is less than the previously assigned expected time of {t.expected_time}")
-                seatable = True
-                res_diff = t.expected_time - res_time
-                print(seatable)
+            if res_time <= t.res_time and expected_time >= res_time:
+                res_diff = expected_time - t.res_time
                 print(f"smallest_diff {smallest_diff}")
-
                 if res_diff < smallest_diff:
                     smallest_diff = res_diff
                     table_selected = t.table_id
-                    print(smallest_diff, t.table_id)
-                    print
+                    print(smallest_diff)
 
-    print(smallest_diff, table_selected)
-    return table_selected
+            print(smallest_diff)
+            print(table_selected)
+            return table_selected
+
+    #
+    #             # print(
+    #             #     f"res time of {res_time} is after the previously assigned {t.res_time} ")
+    #             # print(
+    #             #     f"expected time of {expected_time} is after the previously assigned {t.expected_time} ")
+    #             seatable = True
+    #             res_diff = expected_time - t.res_time
+    #             print(seatable)
+    #             print(res_diff)
+    #             print(f"smallest_diff {smallest_diff}")
+
+    #             if res_diff < smallest_diff:
+    #                 smallest_diff = res_diff
+    #                 table_selected = t.table_id
+    #                 print(smallest_diff)
+
+    #         if res_time <= t.res_time and expected_time <= t.expected_time:
+    #             # print(
+    #             #     f"res time of {res_time}  is less than the previously assigned {t.res_time}")
+    #             # print(
+    #             #     f"expected time of {expected_time} is less than the previously assigned expected time of {t.expected_time}")
+    #             seatable = True
+    #             res_diff = t.expected_time - res_time
+    #             print(seatable)
+    #             print(f"smallest_diff {smallest_diff}")
+
+    #             if res_diff < smallest_diff:
+    #                 smallest_diff = res_diff
+    #                 table_selected = t.table_id
+    #                 print(smallest_diff, t.table_id)
+    #                 print
+    #         else:
+    #             unseatable_tables.append(t.table_id)
+    #             print("CONFLICT")
+    # print(unseatable_tables)
+
+    # print(smallest_diff, table_selected)
+    # return table_selected
 
 
 def get_unseated_by_restaurant(restaurant_id):
 
-    four_hour_before = datetime.now() - timedelta(hours=4)
+    four_hour_before = datetime.now() - timedelta(hours=2)
     hour_after = datetime.now() + timedelta(hours=1)
     print(four_hour_before)
     print(' four_hour_before')
@@ -261,7 +349,7 @@ def get_unseated_by_restaurant(restaurant_id):
     print(type(hour_after))
 
     unseated_upcoming = Reservation.query.filter(Reservation.arrival_time == None, Reservation.restaurant_id == restaurant_id,
-                                                 Reservation.res_time < hour_after, Reservation.res_time > four_hour_before).order_by(Restaurant.res_time.desc()).all()
+                                                 Reservation.res_time < hour_after, Reservation.res_time > four_hour_before).order_by(Reservation.res_time.desc()).all()
 
     print(
         f"here is the first option original____________________________________________________\n\n\n\n {unseated_upcoming}")

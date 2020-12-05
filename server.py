@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id, date_match, expected_time_calc, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match, get_reservations_by_restaurant, open_time_slot, get_unseated_by_restaurant
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest, get_all_guests, get_guest_by_id, date_match, expected_time_calc, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match, get_reservations_by_restaurant, open_time_slot, get_unseated_by_restaurant, assign_table
 from dateutil import parser
 from arrow import arrow
 from datetime import datetime, timedelta
@@ -178,6 +178,9 @@ def make_reservation():
     # gets tables in the restaurant
 
     qualified_tables = table_match(party_num, tables)
+    if qualified_tables == []:
+        flash('Unfortunately this restaurant can not accomidate tables of that size')
+        return redirect('/make_res')
     # checks which tables match requirements- retuns list of table objects
     # TODO reenter booth logic after testing
 
@@ -192,11 +195,24 @@ def make_reservation():
 
     expected_time = res_time + timedelta(minutes=expected)
     # converts to relevant format
-
-    table_id = open_time_slot(
+    print("")
+    print("")
+    print("")
+    print("")
+    qualified_time_table = open_time_slot(
         restaurant_id, qualified_tables, res_time, expected_time)
+    print(qualified_time_table)
+    if qualified_time_table == []:
+        flash('There are no tables avaliable for this time')
+        return redirect('/make_res')
+
+    table_id = assign_table(qualified_time_table, restaurant_id,
+                            res_time, expected_time)
+    print(table_id)
+
     # checks booked times for reservations not yet seated that fit the table requirements
     unseated_upcoming = get_unseated_by_restaurant(restaurant_id)
+
     # if qualified_tables == []:
     #     return print("THERE ARE NO TABLES THAT MATCH THIS REQUEST \n\n\n\n")
 

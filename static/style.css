@@ -1,4 +1,6 @@
 .tabletop {
-  height: 50px;
   width: 50px;
+}
+p {
+  font-family: "Scada", sans-serif;
 }
