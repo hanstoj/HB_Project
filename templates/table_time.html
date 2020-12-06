@@ -25,8 +25,13 @@
                         <div>
                         <img class= "tabletop" src="/static/2_top.png" alt= "x[]x">
                         <p> table number:{{ table.table_num }} </p>
+                        {% for r in unseated_upcoming %}
 
+                              {%if r.table_id == table.table_id%}
+                                    <p>The next reservation is at {{r.res_time}}</p>
+                              {%endif%}
 
+                        {%endfor%}
 
                         </div>
 
@@ -34,6 +39,13 @@
                         <div>
                         <img class="tabletop" src="/static/4_top.png" alt="[]">
                         <p> table number:{{ table.table_num }} </p>
+                        {% for r in unseated_upcoming %}
+
+                              {%if r.table_id == table.table_id%}
+                                    <p>The next reservation is at {{r.res_time}}</p>
+                              {%endif%}
+
+                        {%endfor%}
 
                         </div>
 
