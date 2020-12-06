@@ -203,15 +203,18 @@ def make_reservation():
         restaurant_id, qualified_tables, res_time, expected_time)
     print(qualified_time_table)
     if qualified_time_table == []:
-        flash('There are no tables avaliable for this time')
+        flash('There are no tables avaliable at this time')
         return redirect('/make_res')
-
-    table_id = assign_table(qualified_time_table,
-                            res_time, expected_time)
+    if len(qualified_time_table) == 1:
+        table_id = qualified_time_table[0]
+    else:
+        table_id = assign_table(qualified_time_table,
+                                res_time, expected_time)
     print(table_id)
 
     # checks booked times for reservations not yet seated that fit the table requirements
     unseated_upcoming = get_unseated_by_restaurant(restaurant_id)
+    # retrieves for display
 
     # if open_time_slot == None:
     #     return print("THERE ARE NO OPEN TIMES THAT MATCH THIS REQUEST \n\n\n\n")
