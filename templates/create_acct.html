@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create TableTime Account</title>
     <style>
-
+        h1{
+            text-align: center
+        }
+        p{
+            font-weight: 4px;
+        }
         form{
             text-align: center;
             border: 2px solid black;
@@ -27,6 +32,7 @@
     </style>
 </head>
 <body>
+    <h1>Create Table Timer Account</h1>
     {% for msg in get_flashed_messages() %}
     <p class="flash-msg">
       {{ msg }}

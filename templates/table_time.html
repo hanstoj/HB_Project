@@ -11,15 +11,25 @@
                         <div class = "table" >
                         <img class="tabletop" src="/static/4_top.png" alt="[]">
                         <p> table number:{{ table.table_num }} {{table.table_id}} </p>
+                        {% for r in current_res %}
+                              {%if r.table_id == table.table_id%}
+                              <form class=secret_form action = '/finished' method = 'POST'>
+                                    <input type="hidden" id="finished_g" name="finished_g" value={{r.guest_id}}>
+                                    <input type="hidden" id="finished_r" name="finished_res_id" value={{r.res_id}}>
+
+                                    <button class= "time" type="submit">Finished</button>
+                              </form>
+                              {%endif%}
+                        {%endfor%}
                         {% for r in unseated_upcoming %}
 
                               {%if r.table_id == table.table_id%}
                               <p> the reservation id is {{r.res_id}}</p>
                               <p>Next Res at {{r.res_time.strftime('%H:%M')}}</p>
-                              <form action = '/seated' method = 'POST'>
+                              <form class=secret_form action = '/seated' method = 'POST'>
                                     <input type="hidden" id="seated" name="seated" value={{r.guest_id}}>
-                                    <input type="hidden" id="seated_res_id" name="seated_res_id" value={{r.res_id}}>
-                                    <button class= "s_button" type="submit">Seated</button>
+                                    <input type="hidden" id="finished_r" name="finished_r" value={{r.res_id}}>
+                                    <button class= "time" type="submit">Seated</button>
                               </form>
                               {%endif%}
 
@@ -30,15 +40,26 @@
                   <div class = "table" >
                         <img class= "tabletop" src="/static/2_top.png" alt= "x[]x">
                         <p> table number:{{ table.table_num }} {{table.table_id}}</p>
+                        {% for r in current_res %}
+                              {%if r.table_id == table.table_id%}
+                              <form class=secret_form action = '/finished' method = 'POST'>
+                                    <input type="hidden" id="finished_g" name="finished_g" value={{r.guest_id}}>
+                                    <input type="hidden" id="finished_r" name="finished_r" value={{r.res_id}}>
+
+                                    <button class= "time" type="submit">Finished</button>
+                              </form>
+                              {%endif%}
+                        {%endfor%}
+
                         {% for r in unseated_upcoming %}
 
                               {%if r.table_id == table.table_id%}
                               <p>Next Res at {{r.res_time.strftime('%H:%M')}}</p>
-                              <form action = '/seated' method = 'POST'>
+                              <form class=secret_form action = '/seated' method = 'POST'>
                                     <input type="hidden" id="seated" name="seated" value={{r.guest_id}}>
                                     <input type="hidden" id="seated_res_id" name="seated_res_id" value={{r.res_id}}>
 
-                                    <button class= "s_button" type="submit">Seated</button>
+                                    <button class= "time" type="submit">Seated</button>
                               </form>
                               {%endif%}
 
@@ -50,16 +71,26 @@
                         <div class = "table" >
                         <img class="tabletop" src="/static/4_top.png" alt="[]">
                         <p> table number:{{ table.table_num }} </p>
+                        {% for r in current_res %}
+                              {%if r.table_id == table.table_id%}
+                              <form class=secret_form action = '/finished' method = 'POST'>
+                                    <input type="hidden" id="finished_g" name="finished_g" value={{r.guest_id}}>
+                                    <input type="hidden" id="finished_r" name="finished_r" value={{r.res_id}}>
+
+                                    <button class= "time" type="submit"> Finished </button>
+                              </form>
+                              {%endif%}
+                        {%endfor%}
                         {% for r in unseated_upcoming %}
 
                               {%if r.table_id == table.table_id%}
                                     <p>Next Res at {{r.res_time.strftime('%H:%M')}}</p>
                                     <p> the reservation id is {{r.res_id}}</p>
-                                    <form action = '/seated' method = 'POST'>
-                                          <input type="hidden" id="seated_g" name="seated_g" value={{r.guest_id}}>
+                                    <form class=secret_form action = '/seated' method = 'POST'>
+                                          <input type="hidden" id="seated" name="seated" value={{r.guest_id}}>
                                           <input type="hidden" id="seated_res_id" name="seated_res_id" value={{r.res_id}}>
 
-                                          <button class= "s_button" type="submit">Seated</button>
+                                          <button class= "time" type="submit">Seated</button>
                                     </form>
                               {%endif%}
 

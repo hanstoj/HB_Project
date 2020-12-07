@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db, Guest
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest,  get_guest_by_id, date_match, expected_time_calc, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match, get_reservations_by_restaurant, open_time_slot, get_unseated_by_restaurant, assign_table, update_guest_seating_time, update_reservation_arrival_time
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest,  get_guest_by_id, date_match, expected_time_calc, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match, get_reservations_by_restaurant, open_time_slot, get_unseated_by_restaurant, assign_table, update_guest_seating_time, update_reservation_arrival_time, update_finished_time
 from dateutil import parser
 from arrow import arrow
 from datetime import datetime, timedelta
@@ -123,7 +123,9 @@ def TableTime():
 
     unseated_upcoming = get_unseated_by_restaurant(restaurant_id)
 
-    return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming)
+    current_res = get_current_reservations_by_restaurant(restaurant_id)
+
+    return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res)
 
 
 @app.route('/seated', methods=['POST'])
@@ -145,18 +147,14 @@ def update_seating_page():
     update_guest_seating_time(guest_id, seated_time)
     update_reservation_arrival_time(res_id, seated_time)
 
-    print("above are the guest id and guest seated time")
-    print("above are the guest id and guest seated time")
-    print("above are the guest id and guest seated time")
-    print("above are the guest id and guest seated time")
-    print("above are the guest id and guest seated time")
     restaurant_id = session['restaurant_id']
 
     tables = get_tables_by_restaurant_id(restaurant_id)
 
     unseated_upcoming = get_unseated_by_restaurant(restaurant_id)
+    current_res = get_current_reservations_by_restaurant(restaurant_id)
 
-    return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming)
+    return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res)
 
 
 @app.route('/make_res')
@@ -254,18 +252,34 @@ def make_reservation():
     # creates reservation
     unseated_upcoming = get_unseated_by_restaurant(restaurant_id)
     current_res = get_current_reservations_by_restaurant(restaurant_id)
+    print(current_res)
     print(reservation)
     return render_template('table_time.html', guest=guest,
                            reservation=reservation, tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res)
 
 
-@app.route('/guest_info')
-def display_guest_info(restaurant_id):
-    """Display guest information Page"""
+@app.route('/finished', methods=['POST'])
+def collect_finished_data():
+    guest_id = request.form.get('finished_g')
+    res_id = request.form.get('finished_r')
+    seated_time = datetime.now()
+    print(guest_id)
+    print(res_id)
+    print(seated_time)
+    g = update_finished_time(res_id, guest_id, seated_time)
+    print(g)
+    print("GUEST ID FOLLOWED BY SEATED ID")
+    print("GUEST ID FOLLOWED BY SEATED ID")
+    print("GUEST ID FOLLOWED BY SEATED ID")
 
-    guests = get_all_guests_by_restaurant(restaurant_id)
-    # sort by restaurant
-    return render_template("guest_info.html", guests=guests)
+
+# @app.route('/guest_info')
+# def display_guest_info(restaurant_id):
+#     """Display guest information Page"""
+
+#     guests = get_all_guests_by_restaurant(restaurant_id)
+#     # sort by restaurant
+#     return render_template("guest_info.html", guests=guests)
 
 
 #

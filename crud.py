@@ -98,20 +98,6 @@ def update_reservation_arrival_time(res_id, seated_time):
     print(r.arrival_time)
     db.session.add(r)
     db.session.commit()
-    print(r)
-    print("HERE WE GOOOOO")
-    print("HERE WE GOOOOO")
-    print("HERE WE GOOOOO")
-    print("HERE WE GOOOOO")
-    print("HERE WE GOOOOO")
-    print("HERE WE GOOOOO")
-    print("HERE WE GOOOOO")
-    print("HERE WE GOOOOO")
-    print("HERE WE GOOOOO")
-    print("HERE WE GOOOOO")
-    print("HERE WE GOOOOO")
-    print("HERE WE GOOOOO")
-    print("HERE WE GOOOOO")
 
 
 def get_guest_by_id(guest_id):
@@ -173,6 +159,20 @@ def expected_time_calc(party_num, is_celebrating, avg_time_spent):
     print(expected)
     print("expected time is above")
     return expected
+
+
+def update_finished_time(res_id, guest_id, seated_time):
+    g = get_guest_by_id(guest_id)
+    r = Reservation.query.get(res_id)
+    print(r.arrival_time)
+    print(seated_time)
+    print("arrival and seated")
+    print("arrival and seated")
+    print("arrival and seated")
+    print("arrival and seated")
+    print("arrival and seated")
+    print("arrival and seated")
+    print(g)
 
 
 def get_reservations_by_restaurant(restaurant_id):

@@ -13,6 +13,13 @@ body {
 }
 form {
   text-align: center;
-  border: 2px solid black;
-  border-radius: 10px 20px;
+}
+input {
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.secret_form {
+  border: 0;
+  text-align: none;
 }
