@@ -47,17 +47,6 @@ def get_table_by_table_num(table_num):
     return Dinning_table.query.filter(Dinning_table.table_num == table_num).first()
 
 
-def create_res(guest_id, restaurant_id, party_num, res_date, res_time, expected_time, res_notes, booth_pref, is_celebrating, table_id, end_time=None, arrival_time=None):
-    """Create and return a restaurant."""
-
-    reservation = Reservation(guest_id=guest_id, restaurant_id=restaurant_id, party_num=party_num, res_date=res_date, res_time=res_time, expected_time=expected_time, res_notes=res_notes,
-                              booth_pref=booth_pref, is_celebrating=is_celebrating, table_id=table_id, end_time=end_time, arrival_time=arrival_time)
-    db.session.add(reservation)
-    db.session.commit()
-
-    return reservation
-
-
 def create_guest(phone_num, guest_name, avg_time_spent=45, num_visits=0):
     print("")
     print("")
@@ -72,9 +61,57 @@ def create_guest(phone_num, guest_name, avg_time_spent=45, num_visits=0):
     return guest
 
 
+def create_res(guest_id, restaurant_id, party_num, res_date, res_time, expected_time, res_notes, booth_pref, is_celebrating, table_id, end_time=None, arrival_time=None):
+    """Create and return a restaurant."""
+
+    reservation = Reservation(guest_id=guest_id, restaurant_id=restaurant_id, party_num=party_num, res_date=res_date, res_time=res_time, expected_time=expected_time, res_notes=res_notes,
+                              booth_pref=booth_pref, is_celebrating=is_celebrating, table_id=table_id, end_time=end_time, arrival_time=arrival_time)
+    db.session.add(reservation)
+    db.session.commit()
+
+    return reservation
 # def get_guest_by_phone_num(phone_num):
 
 #     return Guest.query.
+
+
+def update_guest_seating_time(guest_id, seated_time):
+    g = Guest.query.get(guest_id)
+    print(g)
+
+    g.num_visits += 1
+    print(g.num_visits)
+    db.session.add(g)
+    db.session.commit()
+    print(g)
+
+
+def update_reservation_arrival_time(res_id, seated_time):
+    print(res_id)
+    print("the res id is above")
+    r = Reservation.query.get(res_id)
+
+    print(r)
+    print("this is the reservation withthe res id")
+
+    r.arrival_time = seated_time
+    print(r.arrival_time)
+    db.session.add(r)
+    db.session.commit()
+    print(r)
+    print("HERE WE GOOOOO")
+    print("HERE WE GOOOOO")
+    print("HERE WE GOOOOO")
+    print("HERE WE GOOOOO")
+    print("HERE WE GOOOOO")
+    print("HERE WE GOOOOO")
+    print("HERE WE GOOOOO")
+    print("HERE WE GOOOOO")
+    print("HERE WE GOOOOO")
+    print("HERE WE GOOOOO")
+    print("HERE WE GOOOOO")
+    print("HERE WE GOOOOO")
+    print("HERE WE GOOOOO")
 
 
 def get_guest_by_id(guest_id):
@@ -114,6 +151,10 @@ def get_guest_by_phone_num(phone_num):
     return Guest.query.get(phone_num)
 
 
+def get_guest_by_restaurant_id(restaurant_id):
+    Reservation.query.filter(restaurant_id)
+
+
 def expected_time_calc(party_num, is_celebrating, avg_time_spent):
 
     print(f"{party_num}, {is_celebrating}, {avg_time_spent}")
@@ -126,7 +167,11 @@ def expected_time_calc(party_num, is_celebrating, avg_time_spent):
     if is_celebrating:
         expected = expected + 20
         print(f"is celebraing update: {expected}")
-
+    print("")
+    print("")
+    print("")
+    print(expected)
+    print("expected time is above")
     return expected
 
 
@@ -154,13 +199,21 @@ def table_match(party_num, tables):
     # booth_pref,
     table_matches = []
     for table in tables.tables:
+        print(f"checking {table.table_id}")
         if int(party_num) <= table.num_seats:
-            seats = True
-        else:
-            seats = False
-            print("no booths currently avalible, continue without booth?")
-        if seats == True:
+            # empty = table.num_seats - int(party_num)
+            print(f"table {table.table_id} is a match ")
             table_matches.append(table.table_id)
+
+        else:
+            print(
+                f"table {table.table_id} is NOT a match  it has {party_num} and {table.num_seats}")
+
+    print("")
+    print("")
+    print("")
+    print(table_matches)
+    print("the above tables match the requirements")
     return table_matches  # Return list of table ids that it matches with
 
 # NOTE: Goal:  get table id for each reservation and times of assigned reservations with that table
@@ -170,75 +223,105 @@ def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
 
     print("IF YOU MADE IT HERE")
     unseated = Reservation.query.filter(
-        Reservation.arrival_time == None, Reservation.restaurant_id == restaurant_id)
-
-    print(qualified_tables)
-    print("qualified")
-    print("qualified")
-    print("qualified")
-
-    print("starting the loop")
+        Reservation.arrival_time == None,  Reservation.restaurant_id == restaurant_id).all()
+    banned_table = []
     for t in unseated:
-        print(t.res_time)
-        print(t.table_id)
-        unseatable_tables = []
-        print(unseatable_tables)
 
-        for t.table_id in qualified_tables:
-            if t.res_time <= res_time and t.expected_time <= expected_time:
+        if t.table_id in qualified_tables:
+
+            if t.res_time <= res_time and res_time <= t.expected_time:
+                print(f"new reservation times: {res_time} - {expected_time}")
                 print(
-                    f"first res {t.res_time} is less than new res {res_time} ")
+                    f"previously made res times: {t.res_time} - {t.expected_time}")
                 print(
-                    f" first exp time {t.expected_time} is before new expected {expected_time}")
+                    f" case 1")
                 print(f"{t.table_id} maps as :")
                 print(
                     f"-----------")
                 print(
                     f"     ------------")
-                qualified_tables.remove(t.table_id)
-                print(qualified_tables)
+                print("THIS IS BEING REMOVED CONFIRM IS THIS CORRECT")
+                # qualified_tables.pop(t.table_id)
+                banned_table.append(t.table_id)
+                print(banned_table)
 
-            if res_time <= t.res_time and expected_time <= t.expected_time:
+            if res_time <= t.res_time and t.res_time <= expected_time:
+                print(f"new reservation times: {res_time} - {expected_time}")
+                print(
+                    f"previously made res times: {t.res_time} - {t.expected_time}")
                 print(f"{t.table_id} maps as :")
                 print(
-                    f"first NEW {res_time} is before the OLD res {t.res_time} ")
-                print(
-                    f" first NEW exp time {expected_time} is before new expected {t.expected_time}")
+                    "case 2")
+
                 print(
                     f"          ----------------")
                 print(
                     f" ----------------")
-                qualified_tables.remove(t.table_id)
-                print(qualified_tables)
+                print("THIS IS BEING REMOVED CONFIRM IS THIS CORRECT")
+                # qualified_tables.pop(t.table_id)
+                banned_table.append(t.table_id)
+                print(banned_table)
 
             if t.res_time <= res_time and expected_time <= t.expected_time:
+                print(f"new reservation times: {res_time} - {expected_time}")
+                print(
+                    f"previously made res times: {t.res_time} - {t.expected_time}")
                 print(f"{t.table_id} maps as :")
+
                 print(
-                    f"first OLD {t.res_time} is before the NEW res {res_time} ")
-                print(
-                    f" first NEW exp time {expected_time} is before new expected {t.expected_time}")
+                    f"case 3")
                 print(
                     f"---------------------------")
                 print(
                     f"      ------      ")
-                qualified_tables.remove(t.table_id)
-                print(qualified_tables)
+                print("THIS IS BEING REMOVED CONFIRM IS THIS CORRECT")
+                # qualified_tables.pop(t.table_id)
+                banned_table.append(t.table_id)
+                print(banned_table)
 
             if res_time <= t.res_time and t.expected_time <= expected_time:
+                print(f"new reservation times: {res_time} - {expected_time}")
+                print(
+                    f"previously made res times: {t.res_time} - {t.expected_time}")
                 print(f"{t.table_id} maps as :")
                 print(
-                    f"first NEW {res_time} is before the OLD res {t.res_time} ")
-                print(
-                    f" first OLD exp time {expected_time} is before NEW expected {t.expected_time}")
+                    f"case 4")
+
                 print(
                     f"   -----    ")
                 print(
                     f"-----------------")
-                qualified_tables.remove(t.table_id)
-                print(qualified_tables)
-            print("these are still qualified")
+                print("THIS IS BEING REMOVED CONFIRM IS THIS CORRECT")
+                # qualified_tables.pop(t.table_id)
+                banned_table.append(t.table_id)
+                print(banned_table)
 
-            return qualified_tables
+    print("final")
+    print(banned_table)
+    print("this is the final list of banned tables")
+    print("")
+    print("")
+    print("")
+    print("these are still qualified")
+    qt_set = set(qualified_tables)
+    print("qt_set")
+    print("set of qualified")
+    print(qt_set)
+    print("set of banned tables")
+    banned = set(banned_table)
+    print(banned)
+
+    f = qt_set - banned
+    print("set qt minus banned")
+    free_tables = list(f)
+    print("does this look right??????")
+    print("free tables")
+    print(free_tables)
+    print('')
+    print('')
+    print('')
+    print('')
+    return free_tables
 
 
 def assign_table(qualified_time_table, res_time, expected_time):
@@ -277,36 +360,10 @@ def assign_table(qualified_time_table, res_time, expected_time):
                 table_selected = t.table_id
                 print(smallest_diff)
     print(smallest_diff, table_selected)
-    return table_selected
-
-    #     if i.table_id in qt:
-    #         print(i.table_id)
-    #         print(qt)
-
-    # for t in unseated:
-    #     print(t)
-
-    #     smallest_diff = timedelta(2020, 4, 12, 0, 0, 0)
-    #     for t in qualified_time_table:
-    #         if t.res_time <= res_time and res_time >= t.expected_time:
-    #             res_diff = expected_time - t.res_time
-    #             print(f"smallest_diff {smallest_diff}")
-    #             if res_diff < smallest_diff:
-    #                 smallest_diff = res_diff
-    #                 table_selected = t.table_id
-    #                 print(smallest_diff)
-
-    #         if res_time <= t.res_time and expected_time >= res_time:
-    #             res_diff = expected_time - t.res_time
-    #             print(f"smallest_diff {smallest_diff}")
-    #             if res_diff < smallest_diff:
-    #                 smallest_diff = res_diff
-    #                 table_selected = t.table_id
-    #                 print(smallest_diff)
-
-    #     print(smallest_diff)
-    #     print(table_selected)
-    #     return table_selected
+    if smallest_diff == timedelta(2020, 4, 12, 0, 0, 0):
+        return qualified_time_table[0]
+    else:
+        return table_selected
 
 
 def get_unseated_by_restaurant(restaurant_id):
@@ -326,216 +383,4 @@ def get_unseated_by_restaurant(restaurant_id):
     print(
         f"here is the first option original____________________________________________________\n\n\n\n {unseated_upcoming}")
 
-
-# .order_by(
-#         Reservation.res_time.desc()).limit(10).all()
     return unseated_upcoming
-
-
-#     for table_id, dept_name, phone in table_reservations:      # [(n, d, p), (n, d, p)]
-#         print(name, dept_name, phone)
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # else conditions for testing
-
-    # if res_time >= t.res_time and res_time <= t.expected_time:
-    #         print(
-    #             f"res time of {res_time} is after previously booked res_time {t.res_time}")
-    #         print(
-    #             f"res time of {res_time} is before previously booked estimated_time end time {t.expected_time}")
-    #         seatable = False
-    #         print(seatable)
-    #     if res_time <= t.res_time and expected_time >= t.expected_time:
-    #         print(
-    #             f"res time of {res_time} is before previously booked res_time  {t.res_time}")
-    #         print(
-    #             f" and expected time of {expected_time} is after the reservation time {res_time}")
-
-    #         seatable = False
-    #         print(seatable)
-
-    # if res_time >= t.res_time and res_time >= t.expected_time:
-    #     print(
-    #         f"res time of {res_time} is after the previously assigned {t.res_time}")
-    #     print(
-    #         f" res time of {res_time} is after expected end of expected time{t.expected_time}")
-
-    #     print("Yeah huh")
-    # elif res_time <= t.res_time:
-    #     print(
-    #         f"This res time of {res_time} is before previously booked {t.res_time}")
-    #     print("Yeah huh")
-    # else:
-    #     print("Nu uh")
-
-    # test2 = Dinning_table.query.filter_by(restaurant_id = restaurant_id, table_num = )
-
-    # test_table_id = DiningTable.query.filter_by(resturant_id==desired_resturant, table_num==desired_table).first()
-
-    # res_list = Reservation.query.filter_by(Reservation.arrival_time == None, table_id == test_table_id).all()
-
-    # res_check = Reservation.query.filter(
-    # Reservation.table_id == Dinning_table.table_id)
-
-    # .join(DinningTable)
-
-    # NOTE: From SQL ALchemy 2 Lecture Notes
-    # emps = db.session.query(Emplyee, Department).join(Department).all()
-
-    # you can do this
-# if product.favorite[0].user_id == user_id:
-
-
-# if you make a relationship like this
-
-# favorite = db.relationship("Favorite")
-# product = product.query.filter(aldkfjlakdjf)
-# product.favorite
-
-    # products = db.session.query(Product).select_from(Product).join(Favorite, Favorite.product_id == Product.product_id).filter(Favorite.user_id == user_id).all()
-
-    # print(f"THIS IS RES_CHECK {res_check}")  # Identify the tables
-
-    # table_match(party_num, booth_pref, tables):
-
-    # find table id = 1 assocatied with each resrvation id = 1
-    # check start_times reservations associated with that table
-    # check finish_times reservations associated with that table
-    # print()
-#     # [<Reservation res_id=1 table_id = None party_num=4 expected_time = 2020-12-03 14:35:00 res_time=2020-12-03 13:50:00 arriv
-#     print("THIS IS TEST VARIABLE:", test)
-# # al_time=None end_time=Nonebooth_pref=False res_notes=  celebrating=False >
-
-#     for i in test:
-#         print("WHAT IS THIS:", i.res_id)
-
-#     # for i in test.table:
-#     #     print("IS THIS THE TABLE ID?", i.table_id)
-
-#     # check = db.session.query(Reservation.table_id,
-#     #                          Dinning_table.reservation_id,
-#     #                          Reservation.res_time, Reservation.expected_time).join(Reservation).all()
-#     # q.group_by('state').all()
-#     # q.group_by('state').having(db.func.count(Employee.employee_id) > 2).all()
-#     print("If the Above executes..")
-#     # for table_id, reservation_id, res_time, expected_time in check:
-
-#     #     return print(table_id, reservation_id, res_time, expected_time)
-
-#     # tables = Dinning_table.query.options(db.joinedload('reservation')).all()
-#     # print(tables)
-
-#     #     for table in tables:    # [<Emp>, <Emp>]
-#     #         if emp.dept is not None:
-#     #             print(emp.name, emp.dept.dept_code, emp.dept.phone)
-#     #         else:
-#     #             print(emp.name, "-", "-")
-#     #     for table in qualified_tables:
-#     #         print(table)
-#     #         print(table.res_time)
-#     #         print(table.expected_time)
-
-#     # if table.res_time > expected_time:
-#     #     print("")
-#     #     print(f"table.res {table.res}")
-#     #     print ("is greater than")
-#     #     print(f"table.res {expected_time}")
-#     # if table.expected_time > res_time:
-#     #     print("")
-#     #     print
-#     #
-
-#     # pass
-# # def check_logic():
-
-# #     time_expected = 45
-# #     start_time = datetime.now()
-
-# #     finish_time = start_time + timedelta(minutes=time_expected)
-# #     print(f"start time {start_time}")
-# #     print(f"finish time {finish_time}")
-
-# #     for table where match
-
-
-# # def get_
-
-# # def seating_order():
-
-# slack_time = ( res_time - seated_time - e' )
-# if table open from arrivaltime to expected end seat table
-#
-# for table where requirements met
-
-# if table is open from time to time
-# reserve table
-
-# while True:
-
-#     if task_queue.is_empty():
-#         next_task = None
-#     else:
-#         next_task = task_queue.peek()
-
-#     print("Next task:", next_task)
-
-#     command = input("A)dd task, D)o first task, or Q)uit? ")
-
-#     if command == "A":
-#         task = input("Task: ")
-#         task_queue.enqueue(task)
-
-#     elif command == "D":
-#         print("Completed:", task_queue.dequeue())
-
-#     elif command == "Q":
-#         break
-
-#     else:
-#         print("*** Invalid command; try again ***")
-
-# def table_match():
-
-# if table_seats >= party_num:
-#     print("seats match")
-
-# if booth_pref == is_booth:
-#     print("booth match")
-
-# def reservation_assignment(reservation_id):
-#     if table_seats < reservation.party_num:
-#         seats = True
-
-#     if is_taken = False:
-#         not_taken = True
-#   if res_date == datetime.today()
-
-# >>> datetime.now()
-# datetime.datetime(2020, 11, 24, 23, 54, 52, 15333)
-# >>> datetime.today()
-# datetime.datetime(2020, 11, 24, 23, 54, 58, 89993)
-
-# 'res_date': '2020-11-25',
-
-# >>> date.today()
-# datetime.date(2020, 11, 25)
-
-# assign reservation
-# min in reservation start - min res end = avg res
-
-# expected table stay = 45
-
-# if party_num in range 6+:
-#     expected table stay +15
-
-# if celebrating
-#     expected table stay +20:
-
-# total = end - arrival
-# dinning_speed =  total - expected
-
-# assigning table
-# if num_seats - res_size > 0:
-
-# if is_taken = False
-
-# if arrival_time +delta? expected_min is < new arrival time?

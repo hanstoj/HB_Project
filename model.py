@@ -94,7 +94,7 @@ class Guest(db.Model):
     # guest_stats = db.relationship('Guest_stat')
 
     def __repr__(self):
-        return f'<Reservation res_size={self.res_size} phone_num={self.phone_num}>'
+        return f'<Guest guest_id={self.guest_id} phone_num={self.phone_num}> avg_time_spent{self.avg_time_spent} num_visits={self.num_visits}'
 # resttest = Restaurant(username="user", password="password", restaurant_name="restaurant_name")
 
 

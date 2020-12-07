@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
-from model import connect_to_db
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest,  get_guest_by_id, date_match, expected_time_calc, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match, get_reservations_by_restaurant, open_time_slot, get_unseated_by_restaurant, assign_table
+from model import connect_to_db, Guest
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest,  get_guest_by_id, date_match, expected_time_calc, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match, get_reservations_by_restaurant, open_time_slot, get_unseated_by_restaurant, assign_table, update_guest_seating_time, update_reservation_arrival_time
 from dateutil import parser
 from arrow import arrow
 from datetime import datetime, timedelta
@@ -30,12 +30,12 @@ def login_form_submit():
     # if restaurant.password == password:
     #     session['restaurant'] = restaurant.restaurant_id
 
-    # else:
-    #     flash('Logged in')
+    # # # else:
+    # #     flash('Logged in')
 
-    # #
-    # #     session['restaurant_id']= restaurant.restaurant
-    # tables = get_tables_()
+    # # #
+    # # #     session['restaurant_id']= restaurant.restaurant
+    # # tables = get_tables_()
 
     return render_template('table_time.html')
 
@@ -119,14 +119,40 @@ def TableTime():
     """View homepage."""
     restaurant_id = session['restaurant_id']
 
-    print()
-    print("THE RESTAURANT_ID IS:", restaurant_id)
+    tables = get_tables_by_restaurant_id(restaurant_id)
+
+    unseated_upcoming = get_unseated_by_restaurant(restaurant_id)
+
+    return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming)
+
+
+@app.route('/seated', methods=['POST'])
+def update_seating_page():
+    guest_id = request.form.get('seated')
+    res_id = request.form.get('seated_res_id')
+    seated_time = datetime.now()
+    print(seated_time)
+    print(guest_id)
+    print(res_id)
+    print("THIS IS THE RES ID TAKEN IN")
+    print("THIS IS THE RES ID TAKEN IN")
+    print("THIS IS THE RES ID TAKEN IN")
+    print("THIS IS THE RES ID TAKEN IN")
+    print(guest_id)
+    print(seated_time)
+    print("above are the guest id and guest seated time")
+
+    update_guest_seating_time(guest_id, seated_time)
+    update_reservation_arrival_time(res_id, seated_time)
+
+    print("above are the guest id and guest seated time")
+    print("above are the guest id and guest seated time")
+    print("above are the guest id and guest seated time")
+    print("above are the guest id and guest seated time")
+    print("above are the guest id and guest seated time")
+    restaurant_id = session['restaurant_id']
 
     tables = get_tables_by_restaurant_id(restaurant_id)
-    print()
-    print("THE TABLES SHOWN ARE:", tables)
-    print(tables)
-    print()
 
     unseated_upcoming = get_unseated_by_restaurant(restaurant_id)
 
@@ -186,7 +212,10 @@ def make_reservation():
 
     res_check = get_pending_reservations_by_restaurant(restaurant_id)
     print('')
+    print('')
+    print('')
     print(f"reservations waiting {res_check}")
+
     guest = create_guest(phone_num=phone_num, guest_name=guest_name)
 
     expected = expected_time_calc(
@@ -213,7 +242,7 @@ def make_reservation():
     print(table_id)
 
     # checks booked times for reservations not yet seated that fit the table requirements
-    unseated_upcoming = get_unseated_by_restaurant(restaurant_id)
+
     # retrieves for display
 
     # if open_time_slot == None:
@@ -223,43 +252,21 @@ def make_reservation():
     reservation = create_res(guest_id=guest.guest_id, restaurant_id=restaurant_id, party_num=party_num,  res_date=res_date, res_time=res_time, expected_time=expected_time,
                              res_notes=res_notes, booth_pref=booth_pref, is_celebrating=is_celebrating, table_id=table_id)
     # creates reservation
+    unseated_upcoming = get_unseated_by_restaurant(restaurant_id)
+    current_res = get_current_reservations_by_restaurant(restaurant_id)
     print(reservation)
     return render_template('table_time.html', guest=guest,
-                           reservation=reservation, tables=tables, unseated_upcoming=unseated_upcoming)
+                           reservation=reservation, tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res)
 
 
-# @app.route('/guest_info')
-# def display_guest_info(restaurant_id):
-#     """Display guest information Page"""
+@app.route('/guest_info')
+def display_guest_info(restaurant_id):
+    """Display guest information Page"""
 
+    guests = get_all_guests_by_restaurant(restaurant_id)
+    # sort by restaurant
+    return render_template("guest_info.html", guests=guests)
 
-#     guests = get_all_guests_by_restaurant(restaurant_id)
-#     # sort by restaurant
-#     return render_template("guest_info.html", guests=guests)
-
-
-# assign reservation
-# min in reservation start - min res end = avg res
-
-# expected table stay = 45
-
-# if party_num in range 6+:
-#     expected table stay +15
-
-# if celebrating
-#     expected table stay +20:
-
-
-# total = end - arrival
-# dinning_speed =  total - expected
-
-
-# assigning table
-# if num_seats - res_size > 0:
-
-# if is_taken = False
-
-# if arrival_time +delta? expected_min is < new arrival time?
 
 #
 if __name__ == '__main__':
