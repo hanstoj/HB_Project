@@ -9,3 +9,9 @@ h1 {
   max-width: 800px;
   border: aliceblue 2px solid;
 }
+.tabletop {
+  width: 20px;
+}
+body {
+  color: yellow;
+}

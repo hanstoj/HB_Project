@@ -138,7 +138,20 @@ def TableTime():
 @app.route('/seated', methods=['POST'])
 def update_seating_page():
     guest_id = request.form.get('seated')
-    res_id = request.form.get('seated_res_id')
+    print("THIS IS THE Guest BEING TAKEN IN")
+    print(guest_id)
+    print("THIS IS THE G BEING TAKEN IN")
+    print(guest_id)
+    print("THIS IS THE G BEING TAKEN IN")
+
+    res_id = request.form.get('seated_r')
+
+    print("THIS IS THE RES BEING TAKEN IN")
+    print(res_id)
+    print("THIS IS THE RES BEING TAKEN IN")
+    print(res_id)
+    print("THIS IS THE RES BEING TAKEN IN")
+    print(res_id)
     seated_time = datetime.now()
 
     update_guest_seating_time(guest_id, seated_time)

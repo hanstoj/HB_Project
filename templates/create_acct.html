@@ -5,66 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create TableTime Account</title>
     <style>
-        h1{
-            text-align: center
+        h2{
+            text-align: center;
+            color: rgb(7, 61, 7);
         }
-        p{
-            font-weight: 4px;
+        label{
+            font-weight: 6px;
+            color: rgb(7, 61, 7);
+            letter-spacing: .2em;
+        }
+        .center{
+
+            margin: auto;
+            width: 30%;
+
+            padding: 10px;
+            background-color: #7d5841d8;
         }
         form{
+
             text-align: center;
-            border: 2px solid black;
-            border-radius: 10px 20px;
-            background-color: 598392
 
 
         }
         input {
-            padding:10px;
-            margin:10px 0;
+            padding:5px;
+            margin:5px;
         }
 
-        body{
+        body {
 
-            background-color: #FBD1A2;
+            background-image: url('static/img/shawn-ang-nmpW_WwwVSc-unsplash.jpg');
+            height: 500px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
 
     </style>
 </head>
 <body>
-    <h1>Create Table Timer Account</h1>
+
     {% for msg in get_flashed_messages() %}
     <p class="flash-msg">
       {{ msg }}
     </p>
     {% endfor %}
     <form action="/create_acct_form" method="POST">
-        <div class="container">
+        <div class="center">
+            <h2>Create Table Timer Account</h2>
             <div>
                 <label for="username">Create Username</label>
-                <input type="text" name="username" id="username" required>
+                <br>
+                <input type="text" name="username" id="username" required placeholder="Username">
             </div>
             <div>
                 <label for="password">Create password</label>
-                <input type="password" name="password" id="password" required>
+                <br>
+                <input type="password" name="password" id="password" required placeholder="Password">
             </div>
             <div>
                 <label for="confirm_password">Confirm password</label>
-                <input type="password" name="confirm_password" id="confirm_password" required>
+                <br>
+                <input type="password" name="confirm_password" id="confirm_password" required placeholder="Confirm Password">
             </div>
             <div>
                 <label for="restaurant_name">Restaurant Name</label>
-                <input type="text" name="restaurant_name" id="restaurant_name" required>
+                <br>
+                <input type="text" name="restaurant_name" id="restaurant_name" required placeholder="Restaurant Name">
             </div>
             <br>
             <br>
             <div>
                 <label for="open_time">Open Time</label>
+                <br>
                 <input type="time" name="open_time" id="open_time" required>
             </div>
             <div>
                 <label for="close_time">Close Time</label>
-                <input type="time" name="close_time" id="close_time" required>
+                <br>
+                <input type="time" name="close_time" id="close_time" required >
             </div>
 
             <button type="submit">Create Account</button>

@@ -7,8 +7,9 @@ from datetime import datetime, time, timedelta
 # NOTE: Double check if Foreign key needs to be passed in as an argument? LIke resturant ID
 
 # --------------------------------------------------------------------------------------
-                                                #    Restaurant
+#    Restaurant
 # --------------------------------------------------------------------------------------
+
 
 def create_restaurant(username, restaurant_name,
                       password, open_time, close_time):
@@ -33,6 +34,7 @@ def create_restaurant(username, restaurant_name,
     # open_time=open_time, close_time=close_time
     return restaurant
 
+
 def get_restaurant_by_username(username):
 
     return Restaurant.query.filter(Restaurant.username == username).first()
@@ -43,10 +45,8 @@ def get_restaurant_by_restaurant_id(restaurant_id):
     return Restaurant.query.get(restaurant_id)
 
 
-
-
 # --------------------------------------------------------------------------------------
-                                                #    Table
+    #    Table
 # --------------------------------------------------------------------------------------
 
 def create_table(table_num, is_booth, num_seats, restaurant_id):
@@ -71,10 +71,8 @@ def get_tables_by_restaurant_id(restaurant_id):
     return Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).options(db.joinedload("tables")).first()
 
 
-
-
 # --------------------------------------------------------------------------------------
-                                                #    Guest
+    #    Guest
 # --------------------------------------------------------------------------------------
 
 
@@ -90,6 +88,7 @@ def create_guest(phone_num, guest_name, avg_time_spent=45, num_visits=0):
     db.session.commit()
 
     return guest
+
 
 def update_guest_seating_time(guest_id, seated_time):
     g = Guest.query.get(guest_id)
@@ -118,7 +117,7 @@ def get_guest():
 
 
 # --------------------------------------------------------------------------------------
-                                                #    Reservation Making
+    #    Reservation Making
 # --------------------------------------------------------------------------------------
 
 def create_res(guest_id, restaurant_id, party_num, res_date, res_time, expected_time, res_notes, booth_pref, is_celebrating, table_id, end_time=None, arrival_time=None):
@@ -136,24 +135,43 @@ def update_reservation_arrival_time(res_id, seated_time):
     print(res_id)
     print("the res id is above")
     r = Reservation.query.get(res_id)
-
+    print(seated_time)
+    print(r)
+    print(seated_time)
+    print(r)
+    print(seated_time)
+    print(r)
+    print(seated_time)
+    print(r)
+    print(seated_time)
     print(r)
     print("this is the reservation withthe res id")
+    print(r.arrival_time)
+    print(r.arrival_time)
+    print(r.arrival_time)
+    print(r.arrival_time)
+    print(r.arrival_time)
+    print(r.arrival_time)
+    print(r.arrival_time)
+    print(r.arrival_time)
 
     r.arrival_time = seated_time
+
     print(r.arrival_time)
+
     db.session.add(r)
     db.session.commit()
+
 
 def reservation_by_id(reservation_id):
 
     return Restaurant.query.get(reservation_id)
 
+
 def date_match(res_date):
 
     if (datetime.today() - res_date).days == 0:
         return print("date match")
-
 
 
 def expected_time_calc(party_num, is_celebrating, avg_time_spent):
