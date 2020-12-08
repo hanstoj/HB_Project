@@ -4,23 +4,24 @@
 
 {% block body %}
 <div class = "container" >
+   <div class="row">
     <h1>Dinning Room</h1>
-
             {% for table in tables.tables %}
-                        <div class = "table" >
+              <div class="col-lg-3">
+                  <div class = "table" >
 
-                  {%if table.num_seats <= 4 and table.num_seats > 2 and table.is_booth == False%}
-                        <img class="tabletop" width = "200px" src="/static/img/4-top.png" alt="[]">
-                  {%elif table.num_seats <= 2 and table.is_booth == False%}
-                        <img class= "tabletop" width = "200px" src="/static/img/2-top.png" alt= "x[]x">
-                  {%elif table.num_seats <= 2 and table.is_booth == True%}
-                        <img class= "tabletop" width = "200px" src="/static/img/small-booth.png" alt= "x[]x">
-                  {%elif table.num_seats >= 6 and table.is_booth == False %}
-                        <img class="tabletop" width = "200px" src="/static/img/6-top.png" alt="[]">
-                  {%elif table.num_seats >= 4 and table.is_booth == True%}
-                        <img class="tabletop" width = "200px" src="/static/img/big-booth.png" alt="[]">
+                        {%if table.num_seats <= 4 and table.num_seats > 2 and table.is_booth == False%}
+                              <img class="tabletop" width = "200px" src="/static/img/4-top.png" alt="[]">
+                        {%elif table.num_seats <= 2 and table.is_booth == False%}
+                              <img class= "tabletop" width = "200px" src="/static/img/2-top.png" alt= "x[]x">
+                        {%elif table.num_seats <= 2 and table.is_booth == True%}
+                              <img class= "tabletop" width = "200px" src="/static/img/small-booth.png" alt= "x[]x">
+                        {%elif table.num_seats >= 6 and table.is_booth == False %}
+                              <img class="tabletop" width = "200px" src="/static/img/6-top.png" alt="[]">
+                        {%elif table.num_seats >= 4 and table.is_booth == True%}
+                              <img class="tabletop" width = "200px" src="/static/img/big-booth.png" alt="[]">
 
-                  {%endif%}
+                        {%endif%}
                         <p> table number:{{ table.table_num }} {{table.table_id}} </p>
                         {% for r in current_res %}
                               {%if r.table_id == table.table_id%}
@@ -42,11 +43,16 @@
                                     <button class= "time" type="submit">Seated</button>
                               </form>
                               {%endif%}
-
                         {%endfor%}
 
+                  </div>
 
-                        {%endfor%}
+
+             </div>
+            {%endfor%}
+
+      </div>
+</div>
 
 
 <a href="/make_res"> Make New Reservation </a>
