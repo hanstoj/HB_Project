@@ -4,42 +4,53 @@
 
 {% block body %}
 <h1>Make a Reservation</h1>
-<div class = "make_res">
-    <form action="/make_res_form" method="POST">
-        <div>
-            <label for="phone_num">Enter Phone Number</label>
-            <input type="tel" id="phone_num" name="phone_num" required>
+
+<div class="container" >
+    <div class="row align-items-center" id="make_res_form">
+     <form action="/make_res_form" method="POST">
+        <div class="form-group">
+            <label for="phone_num">Guest Phone Number</label>
+            <input type="tel" class="form_control" id="phone_num" name="phone_num" required>
         </div>
-        <div>
-            <label for="guest_name">ReservationName</label>
-            <input type="text" name="guest_name" id="guest_name">
+        <div class="form-group">
+            <label for="guest_name">Reservation Name</label>
+            <input type="text" class="form_control" name="guest_name" id="guest_name">
         </div>
-        <div>
+        <div class="form-group">
             <label for="party_num">Number of Guests in Party</label>
-            <input type="number" name="party_num" id="party_num">
+            <input type="number" class="form_control" name="party_num" id="party_num" required>
         </div>
-        <div>
+        <div class="form-group">
             <label for="res_date">Reservation Date</label>
-            <input type="date" name="res_date" id="res_date">
+            <input type="date" class="form_control" name="res_date" id="res_date" required>
         </div>
-        <div>
+        <div class="form-group">
             <label for="res_time">Reservation Time</label>
-            <input type="time" name="res_time" id="res_time" >
-        </div>
-        <div>
-            <label for="res_notes">Reservation Notes</label>
-            <input type="text" name="res_notes" id="res_notes">
-        </div>
-        <div>
-            <label for="is_celebrating">Celebrating</label>
-            <input type="checkbox" name="is_celebrating" id="is_celebrating" value = 'True'>
-        </div>
-        <div>
-            <label for="booth_pref">Booth</label>
-            <input type="checkbox" name="booth_pref" id="booth_pref" value = 'True'>
+            <input type="time" class="form_control" name="res_time" id="res_time" >
+            <br>
+            <small id="passwordHelpBlock" class="form-text text-muted">
+                The restaurant is open from {{restaurant.open_time.strftime('%H:%M')}} until {{restaurant.close_time.strftime('%H:%M')}}
+                </small>
         </div>
 
+        <div class="form-group">
+            <label for="is_celebrating">Celebrating</label>
+            <input type="checkbox" class="form_control" name="is_celebrating" id="is_celebrating" value = 'True'>
+        <div>
+        <div class="form-group">
+            <label for="res_notes">Reservation Notes</label>
+            <input type="textarea"  name="res_notes" id="res_notes">
+        </div>
+        <div class="form-group">
+            <label for="booth_pref">Booth</label>
+            <input type="checkbox" class="form_control" name="booth_pref" id="booth_pref" value = 'True'>
+        </div>
+        <div class="form-group">
+            <label for="is_celebrating">Celebrating</label>
+            <input type="checkbox" class="form_control" name="is_celebrating" id="is_celebrating" value = 'True'>
+        <div>
         <button type="submit">Make Reservation</button>
-    </form>
+     </form>
+     </div>
 </div>
 {% endblock %}

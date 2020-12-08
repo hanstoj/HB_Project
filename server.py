@@ -190,8 +190,9 @@ def collect_finished_data():
 @app.route('/make_res')
 def display_res_page():
     """Display Res Creation Page"""
-
-    return render_template("make_res.html")
+    restaurant_id = session['restaurant_id']
+    restaurant = get_restaurant_by_restaurant_id(restaurant_id)
+    return render_template("make_res.html", restaurant=restaurant)
 
 
 @ app.route('/make_res_form', methods=['POST'])
