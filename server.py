@@ -1,7 +1,7 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, url_for)
 from model import connect_to_db, Guest
-from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest,  get_guest_by_id, date_match, expected_time_calc, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match, get_reservations_by_restaurant, open_time_slot, get_unseated_by_restaurant, assign_table, update_guest_seating_time, update_reservation_arrival_time, update_finished_time
+from crud import get_restaurant_by_username, get_table_by_table_num, create_res, create_table, create_restaurant, get_restaurant_by_restaurant_id, get_tables_by_restaurant_id, create_guest,  get_guest_by_id, date_match, expected_time_calc, get_guest_by_phone_num, get_pending_reservations_by_restaurant, get_current_reservations_by_restaurant, get_past_reservations_by_restaurant, table_match, get_reservations_by_restaurant, open_time_slot, get_unseated_by_restaurant, assign_table, update_guest_seating_time, update_reservation_arrival_time, update_finished_time, get_guest
 from dateutil import parser
 from arrow import arrow
 from datetime import datetime, timedelta
@@ -13,39 +13,36 @@ app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
 
 
-@app.route('/')
-def login_page():
-    """View Login."""
-    #
-    return render_template('log_in.html')
+# --------------------------------------------------------------------------------------
+#    Account Creation
+# --------------------------------------------------------------------------------------
 
 
-@app.route('/login_form', methods=['POST'])
-def login_form_submit():
-    """Submit login form."""
-    # username = request.form.get('username')
-    # password = request.form.get('password')
-
-    # restaurant = get_restaurant_by_username(username)
-    # if restaurant.password == password:
-    #     session['restaurant'] = restaurant.restaurant_id
-
-    # # # else:
-    # #     flash('Logged in')
-
-    # # #
-    # # #     session['restaurant_id']= restaurant.restaurant
-    # # tables = get_tables_()
-
-    return render_template('table_time.html')
-
-
-# @app.route('/', methods=[POST])
+# @app.route('/')
 # def login_page():
-#     """View homepage."""
-
-
+#     """View Login."""
+#     #
 #     return render_template('log_in.html')
+
+
+# @app.route('/login_form', methods=['POST'])
+# def login_form_submit():
+"""Submit login form."""
+# username = request.form.get('username')
+# password = request.form.get('password')
+
+# restaurant = get_restaurant_by_username(username)
+# if restaurant.password == password:
+#     session['restaurant'] = restaurant.restaurant_id
+
+# # # else:
+# #     flash('Logged in')
+
+# # #
+# # #     session['restaurant_id']= restaurant.restaurant
+# # tables = get_tables_()
+
+# return render_template('table_time.html')
 
 
 @app.route('/create_acct')
@@ -81,6 +78,11 @@ def create_acct():
     #
 
 
+# --------------------------------------------------------------------------------------
+    #    Table Layout
+# --------------------------------------------------------------------------------------
+
+
 @app.route('/layout/')
 def display_layout_page():
     """Display layout Creation Page"""
@@ -114,6 +116,11 @@ def view_layout_page():
     return render_template('layout.html')
 
 
+# --------------------------------------------------------------------------------------
+    #    Main Page
+# --------------------------------------------------------------------------------------
+
+
 @app.route('/TableTime')
 def TableTime():
     """View homepage."""
@@ -133,18 +140,9 @@ def update_seating_page():
     guest_id = request.form.get('seated')
     res_id = request.form.get('seated_res_id')
     seated_time = datetime.now()
-    print(seated_time)
-    print(guest_id)
-    print(res_id)
-    print("THIS IS THE RES ID TAKEN IN")
-    print("THIS IS THE RES ID TAKEN IN")
-    print("THIS IS THE RES ID TAKEN IN")
-    print("THIS IS THE RES ID TAKEN IN")
-    print(guest_id)
-    print(seated_time)
-    print("above are the guest id and guest seated time")
 
     update_guest_seating_time(guest_id, seated_time)
+
     update_reservation_arrival_time(res_id, seated_time)
 
     restaurant_id = session['restaurant_id']
@@ -155,6 +153,38 @@ def update_seating_page():
     current_res = get_current_reservations_by_restaurant(restaurant_id)
 
     return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res)
+
+
+@app.route('/finished', methods=['POST'])
+def collect_finished_data():
+    guest_id = request.form.get('finished_g')
+    res_id = request.form.get('finished_r')
+    finished_time = datetime.now()
+    print(guest_id)
+    print(res_id)
+    print(finished_time)
+
+    g = update_finished_time(res_id, guest_id, finished_time)
+    print(g)
+    print("GUEST ID FOLLOWED BY SEATED ID")
+    print("GUEST ID FOLLOWED BY SEATED ID")
+    print("GUEST ID FOLLOWED BY SEATED ID")
+    restaurant_id = session['restaurant_id']
+
+    tables = get_tables_by_restaurant_id(restaurant_id)
+
+    unseated_upcoming = get_unseated_by_restaurant(restaurant_id)
+
+    current_res = get_current_reservations_by_restaurant(restaurant_id)
+    print(current_res)
+    print("this is the problem")
+
+    return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res)
+
+
+# --------------------------------------------------------------------------------------
+    #    Reservation
+# --------------------------------------------------------------------------------------
 
 
 @app.route('/make_res')
@@ -196,7 +226,6 @@ def make_reservation():
 
     # TODO Start time conditional -html??
     # TODO End time conditional- html??
-    # TODO Bookings Full??? Needs to all occur here to prevent false booking
 
     tables = get_tables_by_restaurant_id(restaurant_id)
     # gets tables in the restaurant
@@ -222,10 +251,7 @@ def make_reservation():
 
     expected_time = res_time + timedelta(minutes=expected)
     # converts to relevant format
-    print("")
-    print("")
-    print("")
-    print("")
+
     qualified_time_table = open_time_slot(
         restaurant_id, qualified_tables, res_time, expected_time)
     print(qualified_time_table)
@@ -258,28 +284,14 @@ def make_reservation():
                            reservation=reservation, tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res)
 
 
-@app.route('/finished', methods=['POST'])
-def collect_finished_data():
-    guest_id = request.form.get('finished_g')
-    res_id = request.form.get('finished_r')
-    seated_time = datetime.now()
-    print(guest_id)
-    print(res_id)
-    print(seated_time)
-    g = update_finished_time(res_id, guest_id, seated_time)
-    print(g)
-    print("GUEST ID FOLLOWED BY SEATED ID")
-    print("GUEST ID FOLLOWED BY SEATED ID")
-    print("GUEST ID FOLLOWED BY SEATED ID")
+@app.route('/guest_info')
+def display_guest_info():
+    """Display guest information Page"""
 
+    guests = get_guest()
 
-# @app.route('/guest_info')
-# def display_guest_info(restaurant_id):
-#     """Display guest information Page"""
-
-#     guests = get_all_guests_by_restaurant(restaurant_id)
-#     # sort by restaurant
-#     return render_template("guest_info.html", guests=guests)
+    # sort by restaurant
+    return render_template("guest_info.html", guests=guests)
 
 
 #

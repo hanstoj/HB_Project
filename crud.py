@@ -6,6 +6,9 @@ from datetime import datetime, time, timedelta
 
 # NOTE: Double check if Foreign key needs to be passed in as an argument? LIke resturant ID
 
+# --------------------------------------------------------------------------------------
+                                                #    Restaurant
+# --------------------------------------------------------------------------------------
 
 def create_restaurant(username, restaurant_name,
                       password, open_time, close_time):
@@ -30,6 +33,21 @@ def create_restaurant(username, restaurant_name,
     # open_time=open_time, close_time=close_time
     return restaurant
 
+def get_restaurant_by_username(username):
+
+    return Restaurant.query.filter(Restaurant.username == username).first()
+
+
+def get_restaurant_by_restaurant_id(restaurant_id):
+
+    return Restaurant.query.get(restaurant_id)
+
+
+
+
+# --------------------------------------------------------------------------------------
+                                                #    Table
+# --------------------------------------------------------------------------------------
 
 def create_table(table_num, is_booth, num_seats, restaurant_id):
     """Create Table in Restaurant"""
@@ -47,6 +65,19 @@ def get_table_by_table_num(table_num):
     return Dinning_table.query.filter(Dinning_table.table_num == table_num).first()
 
 
+def get_tables_by_restaurant_id(restaurant_id):
+
+    # NOTE: changed it from .all() to .first()
+    return Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).options(db.joinedload("tables")).first()
+
+
+
+
+# --------------------------------------------------------------------------------------
+                                                #    Guest
+# --------------------------------------------------------------------------------------
+
+
 def create_guest(phone_num, guest_name, avg_time_spent=45, num_visits=0):
     print("")
     print("")
@@ -60,6 +91,35 @@ def create_guest(phone_num, guest_name, avg_time_spent=45, num_visits=0):
 
     return guest
 
+def update_guest_seating_time(guest_id, seated_time):
+    g = Guest.query.get(guest_id)
+    print(g)
+
+    g.num_visits += 1
+    print(g.num_visits)
+    db.session.add(g)
+    db.session.commit()
+    print(g)
+
+
+def get_guest_by_id(guest_id):
+
+    return Guest.query.get(guest_id)
+
+
+def get_guest_by_phone_num(phone_num):
+
+    return Guest.query.get(phone_num)
+
+
+def get_guest():
+
+    return Guest.query.get().all()
+
+
+# --------------------------------------------------------------------------------------
+                                                #    Reservation Making
+# --------------------------------------------------------------------------------------
 
 def create_res(guest_id, restaurant_id, party_num, res_date, res_time, expected_time, res_notes, booth_pref, is_celebrating, table_id, end_time=None, arrival_time=None):
     """Create and return a restaurant."""
@@ -70,20 +130,6 @@ def create_res(guest_id, restaurant_id, party_num, res_date, res_time, expected_
     db.session.commit()
 
     return reservation
-# def get_guest_by_phone_num(phone_num):
-
-#     return Guest.query.
-
-
-def update_guest_seating_time(guest_id, seated_time):
-    g = Guest.query.get(guest_id)
-    print(g)
-
-    g.num_visits += 1
-    print(g.num_visits)
-    db.session.add(g)
-    db.session.commit()
-    print(g)
 
 
 def update_reservation_arrival_time(res_id, seated_time):
@@ -99,46 +145,15 @@ def update_reservation_arrival_time(res_id, seated_time):
     db.session.add(r)
     db.session.commit()
 
-
-def get_guest_by_id(guest_id):
-
-    return Guest.query.get(guest_id)
-
-
-def get_restaurant_by_username(username):
-
-    return Restaurant.query.filter(Restaurant.username == username).first()
-
-
-def get_restaurant_by_restaurant_id(restaurant_id):
-
-    return Restaurant.query.get(restaurant_id)
-
-
 def reservation_by_id(reservation_id):
 
     return Restaurant.query.get(reservation_id)
-
-
-def get_tables_by_restaurant_id(restaurant_id):
-
-    # NOTE: changed it from .all() to .first()
-    return Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).options(db.joinedload("tables")).first()
-
 
 def date_match(res_date):
 
     if (datetime.today() - res_date).days == 0:
         return print("date match")
 
-
-def get_guest_by_phone_num(phone_num):
-
-    return Guest.query.get(phone_num)
-
-
-def get_guest_by_restaurant_id(restaurant_id):
-    Reservation.query.filter(restaurant_id)
 
 
 def expected_time_calc(party_num, is_celebrating, avg_time_spent):
@@ -161,18 +176,54 @@ def expected_time_calc(party_num, is_celebrating, avg_time_spent):
     return expected
 
 
-def update_finished_time(res_id, guest_id, seated_time):
+def update_finished_time(res_id, guest_id, finished_time):
     g = get_guest_by_id(guest_id)
     r = Reservation.query.get(res_id)
     print(r.arrival_time)
-    print(seated_time)
-    print("arrival and seated")
-    print("arrival and seated")
-    print("arrival and seated")
-    print("arrival and seated")
-    print("arrival and seated")
-    print("arrival and seated")
+    print("arrival time")
+    print(finished_time)
+    print("finished")
+
+    print(r.end_time)
+    print("end time beforre")
+    r.end_time = finished_time
+    print("end time after assignment")
+    print(r.end_time)
+
+    print(r)
+    print("DOUBLE CHECK BEFORE YOU LOSE THE EXAMPLE")
+    # FINDING A CHECK
+
+    db.session.add(r)
+    db.session.commit()
+    print("IT HAS BEEN COMMITED")
+
+    finished_time = (finished_time - r.arrival_time).total_seconds() / 60.0
+    intfinish = int(finished_time)
+    print
+    print(type(intfinish))
+
+    print(g.avg_time_spent)
+    print("THIS IS THE OLD ONE")
+    added = g.avg_time_spent + intfinish
+    divide = g.num_visits + 1
+    g.avg_time_spent = added / divide
+
+    print(g.avg_time_spent)
+    print("THIS IS THE NEW ONE")
     print(g)
+    print("DOUBLE CHECK BEFORE YOU LOOSE EXAMPLE")
+    db.session.add(g)
+    db.session.commit()
+
+    # r.res =
+
+    print("arrival and seated")
+    print("arrival and seated")
+    print("arrival and seated")
+    print("arrival and seated")
+    print("arrival and seated")
+    print("arrival and seated")
 
 
 def get_reservations_by_restaurant(restaurant_id):
