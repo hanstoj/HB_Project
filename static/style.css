@@ -4,6 +4,7 @@ p {
 h1 {
   text-align: center;
   font-family: "Scada", sans-serif;
+  color: yellow;
 }
 .container {
   max-width: 800px;
