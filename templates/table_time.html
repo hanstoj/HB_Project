@@ -3,7 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-<div class = "container" >
+<div class = "container">
    <div class="row">
     <h1>Dinning Room</h1>
             {% for table in tables.tables %}
@@ -45,6 +45,7 @@
                               {%endif%}
                         {%endfor%}
 
+
                   </div>
 
 
@@ -53,11 +54,6 @@
 
       </div>
 </div>
-
-
-<a href="/make_res"> Make New Reservation </a>
-<br>
-<a href="/guest_info"> View Guest Information</a>
 
 
 {% endblock %}

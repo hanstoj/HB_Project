@@ -1,0 +1,72 @@
+body {
+  background-color: #f4f3ee;
+}
+.center {
+  display: flex;
+  align-items: center;
+}
+p {
+  font-family: "Scada", sans-serif;
+}
+h1 {
+  text-align: center;
+  font-family: "Scada", sans-serif;
+}
+input {
+  align-items: center;
+  text-align: center;
+}
+textarea {
+  display: block;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0 0 -10px;
+  width: 100%;
+  height: 90%;
+  overflow: auto;
+}
+
+.reservation-form {
+  justify-content: center;
+  margin: auto;
+  padding: 10px;
+  width: 60%;
+  background-color: #bcb8b1;
+}
+.cont {
+  text-align: center;
+}
+.information {
+  justify-content: center;
+  margin: auto;
+  max-width: 30%;
+  border-radius: 5%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 20px;
+  background-color: #e0afa0;
+}
+.small-fancy {
+  align-self: center;
+  background-color: #bcb8b1;
+  border-radius: 5%;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  display: inline-block;
+  font-size: 10px;
+}
+.button-house {
+  text-align: center;
+}
+.fancy-button {
+  text-align: center;
+  background-color: #bcb8b1;
+  border-radius: 5%;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  display: inline-block;
+  font-size: 13px;
+}

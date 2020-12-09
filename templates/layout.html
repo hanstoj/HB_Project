@@ -6,25 +6,37 @@
 <body>
 <h1>Create Restaurant Layout</h1>
 <div class="container" >
-  <div class="row align-items-center" id="layout_form">
+  <div class= information>
     <form action="/layout_form/" method= "POST">
-      <div class="form-group">
+      <div>
             <label for="table_num">Enter Table Number</label>
-            <input type="text" class="form-control" id="table_num" name="table_num" required>
+            <input type="text"  id="table_num" name="table_num" required placeholder="10">
+            <br>
+
         </div>
-        <div class="form-group">
+        <div>
             <label for="is_booth">Booth</label>
             <input type="checkbox" name="is_booth"  id="is_booth" value= "True" >
+            <br>
         </div>
-        <div class="form-group">
+
+        <div>
             <label for="num_seats">How many seats</label>
-            <input type="number" class="form-control" name="num_seats" id="num_seats" required>
+            <input type="number" name="num_seats" id="num_seats" required>
+            <br>
         </div>
-        <button class="btn btn-primary">Create New Table</button>
+        <br>
+        <button class= "small-fancy">Create New Table</button>
     </form>
+</div>
+
+<br>
+    <br>
   </div>
 </div>
-<a href="/TableTime">Finish Set Up</a>
+<form class= "button-house" action="/TableTime">
+<button type="submit" class= "fancy-button"> Finished Creating </button>
+</form>
 </body>
 </html>
 {% endblock %}
