@@ -12,7 +12,7 @@ h1 {
   text-align: center;
   font-family: "Scada", sans-serif;
   color: #131200;
-  font-weight: 100;
+  font-weight: 400;
 }
 input {
   align-items: center;
@@ -72,4 +72,28 @@ textarea {
   text-align: center;
   display: inline-block;
   font-size: 13px;
+}
+.flash-msg {
+  font-size: 20px;
+  font-weight: 200;
+  background-color: #d15056;
+}
+.table_num {
+  font-size: 20px;
+  font-family: "Scada", sans-serif;
+  font-weight: 400;
+}
+
+.time {
+  text-align: center;
+  background-color: #f4f3ee;
+  border-radius: 2%;
+  color: rgb(12, 12, 12);
+  padding: 5px 12px;
+  text-align: center;
+  display: inline-block;
+  font-size: 12px;
+}
+.table {
+  justify-content: center;
 }

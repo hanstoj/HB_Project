@@ -129,8 +129,9 @@ def TableTime():
     unseated_upcoming = get_unseated_by_restaurant(restaurant_id)
 
     current_res = get_current_reservations_by_restaurant(restaurant_id)
+    guests = get_guest()
 
-    return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res)
+    return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res, guests=guests)
 
 
 @app.route('/seated', methods=['POST'])
@@ -162,24 +163,25 @@ def update_seating_page():
 
     unseated_upcoming = get_unseated_by_restaurant(restaurant_id)
     current_res = get_current_reservations_by_restaurant(restaurant_id)
-
-    return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res)
+    guests = get_guest()
+    return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming, guests=guests, current_res=current_res)
 
 
 @app.route('/finished', methods=['POST'])
 def collect_finished_data():
     guest_id = request.form.get('finished_g')
     res_id = request.form.get('finished_r')
+
     finished_time = datetime.now()
     print(guest_id)
     print(res_id)
     print(finished_time)
 
-    g = update_finished_time(res_id, guest_id, finished_time)
-    print(g)
+    update_finished_time(res_id, guest_id, finished_time)
     print("GUEST ID FOLLOWED BY SEATED ID")
     print("GUEST ID FOLLOWED BY SEATED ID")
     print("GUEST ID FOLLOWED BY SEATED ID")
+
     restaurant_id = session['restaurant_id']
 
     tables = get_tables_by_restaurant_id(restaurant_id)
@@ -189,8 +191,8 @@ def collect_finished_data():
     current_res = get_current_reservations_by_restaurant(restaurant_id)
     print(current_res)
     print("this is the problem")
-
-    return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res)
+    guests = get_guest()
+    return render_template('table_time.html', tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res, guests=guests)
 
 
 # --------------------------------------------------------------------------------------
@@ -264,6 +266,7 @@ def make_reservation():
 
     expected = expected_time_calc(
         party_num, is_celebrating, guest.avg_time_spent)
+
     # calculates expected minutes a guest may stay
 
     expected_time = res_time + timedelta(minutes=expected)
@@ -296,7 +299,7 @@ def make_reservation():
         alert_m = res_time.time()
         print(alert_m)
         flash(
-            f'There are no tables avaliable at this time, The Next expected avaliablity for this table is {alert_m}')
+            f'There are no tables avaliable at this time, The next expected avaliablity for this table is {alert_m}')
         return redirect('/make_res')
     if len(qualified_time_table) == 1:
         table_id = qualified_time_table[0]
@@ -320,8 +323,9 @@ def make_reservation():
     current_res = get_current_reservations_by_restaurant(restaurant_id)
     print(current_res)
     print(reservation)
+    guests = get_guest()
     return render_template('table_time.html', guest=guest,
-                           reservation=reservation, tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res)
+                           reservation=reservation, guests=guests, tables=tables, unseated_upcoming=unseated_upcoming, current_res=current_res)
 
 
 @app.route('/guest_info')

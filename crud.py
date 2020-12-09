@@ -106,22 +106,23 @@ def get_guest_by_id(guest_id):
     return Guest.query.get(guest_id)
 
 
-def get_guest_by_phone_num(phone_num):
-    g3 = Guest.query.get(3)
-    print(g3.phone_num)
-    print(type(g3.phone_num))
+# def get_guest_by_restaurant(restaurant_id):
+#     test = (Reservation.query.filter(Reservation.restaurant_id == restaurant_id).options(
+#         db.joinedload("guests")).first()
 
-    print("THIS IS A PHONE NUMBER")
-    print("THIS IS A PHONE NUMBER")
-    print(phone_num)
-    print(type(phone_num))
+
+#     print(test)
+#     return test
+
+
+def get_guest_by_phone_num(phone_num):
 
     return (Guest.query.filter(Guest.phone_num == phone_num).first())
 
 
-def get_guest():
+# def get_guest():
 
-    return Guest.query.get().all()
+#     return Guest.query.get().all()
 
 
 # --------------------------------------------------------------------------------------
@@ -165,8 +166,8 @@ def date_match(res_date):
 def expected_time_calc(party_num, is_celebrating, avg_time_spent):
 
     print(f"{party_num}, {is_celebrating}, {avg_time_spent}")
-
-    expected = avg_time_spent
+    change = avg_time_spent
+    expected = change
 
     if int(party_num) > 5:
         expected = expected + 20
@@ -206,7 +207,7 @@ def update_finished_time(res_id, guest_id, finished_time):
     intfinish = int(finished_time)
     print
     print(type(intfinish))
-
+    print(intfinish)
     print(g.avg_time_spent)
     print("THIS IS THE OLD ONE")
     added = g.avg_time_spent + intfinish
@@ -215,6 +216,15 @@ def update_finished_time(res_id, guest_id, finished_time):
 
     print(g.avg_time_spent)
     print("THIS IS THE NEW ONE")
+    print("HOW ARE WE???")
+    print("HOW ARE WE???")
+    print("HOW ARE WE???")
+    print("HOW ARE WE???")
+    print("HOW ARE WE???")
+    print("HOW ARE WE???")
+    print("HOW ARE WE???")
+    print("HOW ARE WE???")
+    print("HOW ARE WE???")
     print(g)
     print("DOUBLE CHECK BEFORE YOU LOOSE EXAMPLE")
     db.session.add(g)
@@ -431,3 +441,8 @@ def get_unseated_by_restaurant(restaurant_id):
         f"here is the first option original____________________________________________________\n\n\n\n {unseated_upcoming}")
 
     return unseated_upcoming
+
+
+def get_guest():
+
+    return Guest.query.all()
