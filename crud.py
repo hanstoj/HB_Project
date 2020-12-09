@@ -107,8 +107,16 @@ def get_guest_by_id(guest_id):
 
 
 def get_guest_by_phone_num(phone_num):
+    g3 = Guest.query.get(3)
+    print(g3.phone_num)
+    print(type(g3.phone_num))
 
-    return Guest.query.get(phone_num)
+    print("THIS IS A PHONE NUMBER")
+    print("THIS IS A PHONE NUMBER")
+    print(phone_num)
+    print(type(phone_num))
+
+    return (Guest.query.filter(Guest.phone_num == phone_num).first())
 
 
 def get_guest():
@@ -135,26 +143,6 @@ def update_reservation_arrival_time(res_id, seated_time):
     print(res_id)
     print("the res id is above")
     r = Reservation.query.get(res_id)
-    print(seated_time)
-    print(r)
-    print(seated_time)
-    print(r)
-    print(seated_time)
-    print(r)
-    print(seated_time)
-    print(r)
-    print(seated_time)
-    print(r)
-    print("this is the reservation withthe res id")
-    print(r.arrival_time)
-    print(r.arrival_time)
-    print(r.arrival_time)
-    print(r.arrival_time)
-    print(r.arrival_time)
-    print(r.arrival_time)
-    print(r.arrival_time)
-    print(r.arrival_time)
-
     r.arrival_time = seated_time
 
     print(r.arrival_time)
@@ -186,9 +174,7 @@ def expected_time_calc(party_num, is_celebrating, avg_time_spent):
     if is_celebrating:
         expected = expected + 20
         print(f"is celebraing update: {expected}")
-    print("")
-    print("")
-    print("")
+
     print(expected)
     print("expected time is above")
     return expected
@@ -264,13 +250,14 @@ def get_past_reservations_by_restaurant(restaurant_id):
     return Reservation.query.filter(Reservation.arrival_time != None, Reservation.end_time != None, Reservation.restaurant_id == restaurant_id).all()
 
 
-def table_match(party_num, tables):
+def table_match(party_num, booth_pref, tables):
     # booth_pref,
     table_matches = []
     for table in tables.tables:
         print(f"checking {table.table_id}")
         if int(party_num) <= table.num_seats:
             # empty = table.num_seats - int(party_num)
+            print(booth_pref)
             print(f"table {table.table_id} is a match ")
             table_matches.append(table.table_id)
 
@@ -284,8 +271,6 @@ def table_match(party_num, tables):
     print(table_matches)
     print("the above tables match the requirements")
     return table_matches  # Return list of table ids that it matches with
-
-# NOTE: Goal:  get table id for each reservation and times of assigned reservations with that table
 
 
 def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
@@ -365,20 +350,11 @@ def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
                 banned_table.append(t.table_id)
                 print(banned_table)
 
-    print("final")
     print(banned_table)
     print("this is the final list of banned tables")
-    print("")
-    print("")
-    print("")
     print("these are still qualified")
     qt_set = set(qualified_tables)
-    print("qt_set")
-    print("set of qualified")
-    print(qt_set)
-    print("set of banned tables")
     banned = set(banned_table)
-    print(banned)
 
     f = qt_set - banned
     print("set qt minus banned")
@@ -386,10 +362,12 @@ def open_time_slot(restaurant_id, qualified_tables, res_time, expected_time):
     print("does this look right??????")
     print("free tables")
     print(free_tables)
+
     print('')
     print('')
     print('')
     print('')
+
     return free_tables
 
 

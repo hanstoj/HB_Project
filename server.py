@@ -103,15 +103,13 @@ def view_layout_page():
     else:
         is_booth = False
 
-    table = get_table_by_table_num(table_num)
+    table = get_tables_by_restaurant_id(restaurant_id)
     if table:
         flash('Table number already exists cannot create')
     else:
         create_table(table_num=table_num,
                      is_booth=is_booth, num_seats=num_seats, restaurant_id=restaurant_id)
         flash('Table was created')
-        #
-        # TODO fix flash
 
     return render_template('layout.html')
 
@@ -238,13 +236,10 @@ def make_reservation():
     else:
         booth_pref = False
 
-    # TODO Start time conditional -html??
-    # TODO End time conditional- html??
-
     tables = get_tables_by_restaurant_id(restaurant_id)
     # gets tables in the restaurant
 
-    qualified_tables = table_match(party_num, tables)
+    qualified_tables = table_match(party_num, booth_pref, tables)
     if qualified_tables == []:
         flash('Unfortunately this restaurant can not accomidate tables of that size')
         return redirect('/make_res')
@@ -257,7 +252,15 @@ def make_reservation():
     print('')
     print(f"reservations waiting {res_check}")
 
-    guest = create_guest(phone_num=phone_num, guest_name=guest_name)
+    g = get_guest_by_phone_num(phone_num)
+    print(g)
+    print(g)
+
+    if g != None:
+        guest = g
+
+    else:
+        guest = create_guest(phone_num=phone_num, guest_name=guest_name)
 
     expected = expected_time_calc(
         party_num, is_celebrating, guest.avg_time_spent)
@@ -270,7 +273,30 @@ def make_reservation():
         restaurant_id, qualified_tables, res_time, expected_time)
     print(qualified_time_table)
     if qualified_time_table == []:
-        flash('There are no tables avaliable at this time')
+        while qualified_time_table == []:
+
+            res_time = res_time + timedelta(minutes=10)
+            expected_time = expected_time + timedelta(minutes=10)
+            print("NEW RES TIME!")
+            print("NEW RES TIME!")
+            print("NEW RES TIME!")
+            print(res_time)
+            print(type(res_time))
+
+            qualified_time_table = open_time_slot(
+                restaurant_id, qualified_tables, res_time, expected_time)
+
+        print(qualified_time_table)
+        print("ALL THE WAY BACK HERE")
+        print("ALL THE WAY BACK HERE")
+        print("ALL THE WAY BACK HERE")
+        print("ALL THE WAY BACK HERE")
+        print("ALL THE WAY BACK HERE")
+
+        alert_m = res_time.time()
+        print(alert_m)
+        flash(
+            f'There are no tables avaliable at this time, The Next expected avaliablity for this table is {alert_m}')
         return redirect('/make_res')
     if len(qualified_time_table) == 1:
         table_id = qualified_time_table[0]

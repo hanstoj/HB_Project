@@ -4,8 +4,9 @@
 
 {% block body %}
 <div class = "container">
-   <div class="row">
+
     <h1>Dinning Room</h1>
+             <div class="row">
             {% for table in tables.tables %}
               <div class="col-lg-3">
                   <div class = "table" >
@@ -22,7 +23,7 @@
                               <img class="tabletop" width = "200px" src="/static/img/big-booth.png" alt="[]">
 
                         {%endif%}
-                        <p> table number:{{ table.table_num }} {{table.table_id}} </p>
+                        <p class= table_num> {{ table.table_num }}  </p>
                         {% for r in current_res %}
                               {%if r.table_id == table.table_id%}
                               <form class=secret_form action = '/finished' method = 'POST'>
@@ -32,10 +33,10 @@
                               </form>
                               {%endif%}
                         {%endfor%}
+
                         {% for r in unseated_upcoming %}
 
                               {%if r.table_id == table.table_id%}
-                              <p> the reservation id is {{r.res_id}}</p>
                               <p>Next Res at {{r.res_time.strftime('%H:%M')}}</p>
                               <form class=secret_form action = '/seated' method = 'POST'>
                                     <input type="hidden" id="seated" name="seated" value={{r.guest_id}}>
