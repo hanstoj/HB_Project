@@ -96,4 +96,9 @@ textarea {
 }
 .table {
   justify-content: center;
+  color: black;
+}
+.nav {
+  border-radius: 2%;
+  background-color: #f4f3ee;
 }

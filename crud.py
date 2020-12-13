@@ -265,7 +265,7 @@ def table_match(party_num, booth_pref, tables):
     table_matches = []
     for table in tables.tables:
         print(f"checking {table.table_id}")
-        if int(party_num) <= table.num_seats:
+        if int(party_num) == table.num_seats:
             # empty = table.num_seats - int(party_num)
             print(booth_pref)
             print(f"table {table.table_id} is a match ")

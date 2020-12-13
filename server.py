@@ -103,13 +103,9 @@ def view_layout_page():
     else:
         is_booth = False
 
-    table = get_tables_by_restaurant_id(restaurant_id)
-    if table:
-        flash('Table number already exists cannot create')
-    else:
-        create_table(table_num=table_num,
-                     is_booth=is_booth, num_seats=num_seats, restaurant_id=restaurant_id)
-        flash('Table was created')
+    create_table(table_num=table_num,
+                 is_booth=is_booth, num_seats=num_seats, restaurant_id=restaurant_id)
+    flash('Table was created')
 
     return render_template('layout.html')
 
@@ -271,12 +267,22 @@ def make_reservation():
 
     expected_time = res_time + timedelta(minutes=expected)
     # converts to relevant format
+    print(expected_time)
+    print("expected_time")
+    print("expected_time")
+    print("expected_time")
+    print("expected_time")
+    print("expected_time")
+    print("expected_time")
+    print("expected_time")
 
     qualified_time_table = open_time_slot(
         restaurant_id, qualified_tables, res_time, expected_time)
     print(qualified_time_table)
-    if qualified_time_table == []:
-        while qualified_time_table == []:
+    qual = len(qualified_time_table)
+    print(qual)
+    if qual == 0:
+        while qual == 0:
 
             res_time = res_time + timedelta(minutes=10)
             expected_time = expected_time + timedelta(minutes=10)
@@ -288,6 +294,8 @@ def make_reservation():
 
             qualified_time_table = open_time_slot(
                 restaurant_id, qualified_tables, res_time, expected_time)
+
+            qual = len(qualified_time_table)
 
         print(qualified_time_table)
         print("ALL THE WAY BACK HERE")
@@ -301,7 +309,8 @@ def make_reservation():
         flash(
             f'There are no tables avaliable at this time, The next expected avaliablity for this table is {alert_m}')
         return redirect('/make_res')
-    if len(qualified_time_table) == 1:
+    elif qual == 1:
+        print("ARE WE GETTING HERE")
         table_id = qualified_time_table[0]
     else:
         table_id = assign_table(qualified_time_table,

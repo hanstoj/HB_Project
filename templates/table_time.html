@@ -30,8 +30,8 @@
                               {%if r.table_id == table.table_id%}
                               {% for g in guests %}
                                {% if g.guest_id == r.guest_id %}
-                                  <p>{{g.guest_name}} at {{r.res_time.strftime('%H:%M')}} </p>
-                                  <p>Guest Averages {{g.guest_avg}} minutes </p>
+                                  <p>{{g.guest_name}} from {{r.res_time.strftime('%H:%M')}} to {{r.expected_time.strftime('%H:%M')}} </p>
+                                  <p>Guest Averages {{g.avg_time_spent}} minutes </p>
                                  {%endif%}
 
                            {%endfor%}
@@ -51,8 +51,9 @@
 
                                 {% for g in guests %}
                                     {% if g.guest_id == r.guest_id %}
-                                     <p>{{g.guest_name}} at {{r.res_time.strftime('%H:%M')}} </p>
-                                     <p>Guest Averages {{g.guest_avg}}minutes </p>
+
+                                     <p>{{g.guest_name}} from {{r.res_time.strftime('%H:%M')}} to {{r.expected_time.strftime('%H:%M')}} </p>
+                                     <p>Guest Averages {{g.avg_time_spent}} minutes </p>
                                      {%endif%}
 
                                      {%endfor%}
