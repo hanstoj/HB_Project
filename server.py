@@ -18,31 +18,32 @@ app.jinja_env.undefined = StrictUndefined
 # --------------------------------------------------------------------------------------
 
 
-# @app.route('/')
-# def login_page():
-#     """View Login."""
-#     #
-#     return render_template('log_in.html')
+@app.route('/')
+def login_page():
+    """View Login."""
+    #
+    return render_template('log_in.html')
 
 
-# @app.route('/login_form', methods=['POST'])
-# def login_form_submit():
+@app.route('/login_form', methods=['POST'])
+def login_form_submit():
+
+
 """Submit login form."""
-# username = request.form.get('username')
-# password = request.form.get('password')
+username = request.form.get('username')
+password = request.form.get('password')
+restaurant = get_restaurant_by_username(username)
 
-# restaurant = get_restaurant_by_username(username)
-# if restaurant.password == password:
-#     session['restaurant'] = restaurant.restaurant_id
+   if restaurant.password == password:
+        session['restaurant'] = restaurant.restaurant_id
 
-# # # else:
-# #     flash('Logged in')
+    else:
+        flash('Logged in')
 
-# # #
-# # #     session['restaurant_id']= restaurant.restaurant
-# # tables = get_tables_()
+    session['restaurant_id'] = restaurant.restaurant
+    tables = get_tables_()
 
-# return render_template('table_time.html')
+    return render_template('table_time.html')
 
 
 @app.route('/create_acct')
